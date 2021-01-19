@@ -1,4 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin     : 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+md-toolbar {
+    min-height: 64px;
+    max-height: 64px
+}
+
+mat-drawer-container {
+    height: calc(100vh - 64px);
+}
+
+
+mat-card table {
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}

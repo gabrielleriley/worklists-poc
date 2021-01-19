@@ -1,0 +1,81 @@
+<h1>Loadable Entity Demo</h1>
+<button (click)="personFacade.refetchPage()">Reload</button>
+<b>Number of selected people: </b> 0
+<app-card-list [isPreloading]="isPreloading$ | async" [hasError]="displayTableError$ | async"
+    [isEmpty]="isEmptyList$ | async">
+    <app-card-list-fab-action-section>
+        <button mat-fab color="primary">
+            <mat-icon>add</mat-icon>
+        </button>
+    </app-card-list-fab-action-section>
+    <app-card-list-preloading-indicator></app-card-list-preloading-indicator>
+    <app-card-list-loading-indicator *ngIf="personFacade.isLoading$ | async"></app-card-list-loading-indicator>
+    <app-card-list-filters-section [formGroup]="searchForm">
+        <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" matInput placeholder="Smith">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="genders" multiple>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="male">Male</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </app-card-list-filters-section>
+
+    <app-card-list-table-section>
+        <table mat-table matSort [dataSource]="entities$ | async">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox color="primary">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox color="primary">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>Id</th>
+                <td mat-cell *matCellDef="let row">{{row.id}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">First Name</th>
+                <td mat-cell *matCellDef="let row">{{row.firstName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Last Name</th>
+                <td mat-cell *matCellDef="let row">{{row.lastName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Email</th>
+                <td mat-cell *matCellDef="let row">{{row.email}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nationality">
+                <th mat-header-cell *matHeaderCellDef>Nationality</th>
+                <td mat-cell *matCellDef="let row">{{row.nationality}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+    </app-card-list-table-section>
+
+    <app-card-list-empty-message>No people found<button (click)="clearFilters()" mat-raised-button color="primary">Clear
+            Filters</button>
+    </app-card-list-empty-message>
+    <app-card-list-error-message>
+        <mat-icon>warning</mat-icon>Failed to load people
+        <button mat-raised-button color="primary">Retry</button>
+    </app-card-list-error-message>
+    <mat-paginator [pageSize]="pageSize" [length]="totalEntitiesCount$ | async"></mat-paginator>
+</app-card-list>
