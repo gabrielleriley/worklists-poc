@@ -1,10 +1,8 @@
 import { NgModule } from "@angular/core";
 import { ApiServicesModule } from '@app/api-services';
-import { NgrxAutoEntityModule } from '@briebug/ngrx-auto-entity';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { appReducer } from './app.state';
-import { AutoEntityModule } from './auto-entity/auto-entity.module';
 
 @NgModule({
     imports: [
@@ -16,8 +14,6 @@ import { AutoEntityModule } from './auto-entity/auto-entity.module';
             }
         }),
         EffectsModule.forRoot([]),
-        NgrxAutoEntityModule.forRoot(),
-        AutoEntityModule
     ],
 })
 export class StateModule { }

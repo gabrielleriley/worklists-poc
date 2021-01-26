@@ -13,7 +13,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { UtilitiesModule } from '@app/utils';
-import { BasicPersonWorklistComponent } from './basic-person-worklist.component';
 import { PersonEntityWorklistDemoComponent } from './loadable-entity-demo/person-entity-worklist.component';
 import { PersonEntityStateModule } from '@app/data-stores/basic/people/person-entity.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -43,11 +42,9 @@ const matModules = [
         ...matModules
     ],
     declarations: [
-        BasicPersonWorklistComponent,
         PersonEntityWorklistDemoComponent
     ],
     exports: [
-        BasicPersonWorklistComponent,
         PersonEntityWorklistDemoComponent
     ]
 })
