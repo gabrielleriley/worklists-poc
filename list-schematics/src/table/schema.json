@@ -1,0 +1,26 @@
+{
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What directory should the table feature be created in?"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What are the table row's entities called?"
+        },
+        "selectable": {
+            "type": "boolean",
+            "x-prompt": "Are row items selectable?"
+        },
+        "filterPreferences": {
+            "type": "boolean",
+            "x-prompt": "Are table filters 'remembered'?"
+        },
+        "actionMenu": {
+            "type": "boolean",
+            "x-prompt": "Do row items include a hamburger menu?"   
+        }
+    }
+}

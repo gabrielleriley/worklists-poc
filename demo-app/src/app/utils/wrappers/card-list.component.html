@@ -1,0 +1,23 @@
+<mat-card fxLayout="column" class="mat-elevation-z8">
+
+    <mat-card-content *ngIf="ignoreInterface || isPreloading" class="card-table--preloading-spinner-content">
+        <ng-content select="app-card-list-preloading-indicator"></ng-content>
+    </mat-card-content>
+    <mat-card-content fxFlex fxLayout="column" [ngClass]="{ hidden: isPreloading }">
+        <ng-content select="app-card-list-fab-action-section"></ng-content>
+        <!-- Filters -->
+        <ng-content select="app-card-list-filters-section"></ng-content>
+
+        <span fxFlex style="position: relative">
+            <!-- Put Loading Spinner Here -->
+            <ng-content *ngIf="ignoreInterface || isLoading" select="app-card-list-loading-indicator"></ng-content>
+            <!-- Table Content -->
+            <ng-content *ngIf="ignoreInterface || (!isEmpty && !hasError)" select="app-card-list-table-section"></ng-content>
+
+            <ng-content *ngIf="ignoreInterface || (isEmpty && !hasError)" select="app-card-list-empty-message"></ng-content>
+            <ng-content *ngIf="ignoreInterface || hasError" select="app-card-list-error-message"></ng-content>            
+        </span>
+
+        <ng-content select="mat-paginator"></ng-content>
+    </mat-card-content>
+</mat-card>

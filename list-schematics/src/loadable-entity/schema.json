@@ -1,0 +1,30 @@
+{
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What directory should the entity store be created in?"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the entity name?"
+        },
+        "paginated": {
+            "type": "boolean",
+            "x-prompt": "Does the entity API use pagination?"
+        },
+        "queryParams": {
+            "type": "boolean",
+            "x-prompt": "Does the entity API support query parameters (sorting, filtering, etc)?"
+        },
+        "read": {
+            "type": "boolean",
+            "x-prompt": "Does the entity API support GET operations?"   
+        },
+        "deleteByKey": {
+            "type": "boolean",
+            "x-prompt": "Does the entity API support DELETE by key/id operations?"
+        }
+    }
+}

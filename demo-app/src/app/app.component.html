@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <span>Worklist Party</span>
+</mat-toolbar>
+<mat-drawer-container class="drawer" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+        <mat-selection-list (selectionChange)="setExample($event)" [multiple]="false">
+            <mat-list-option [selected]="option === o" [value]="o" *ngFor="let o of options">
+                {{o}}
+            </mat-list-option>
+        </mat-selection-list>
+    </mat-drawer>
+
+    <div class="drawer-content">
+        <ng-container *ngIf="option === options[0]">
+            <app-card-list-interaction-composed-demo></app-card-list-interaction-composed-demo>
+        </ng-container>
+
+        <ng-container *ngIf="option === options[1]">
+            <h1>Worklist Demo</h1>
+            <!-- Put the demo worklist here -->
+        </ng-container>
+    </div>
+</mat-drawer-container>

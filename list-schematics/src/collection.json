@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "loadable-entity": {
+      "description": "Generates a NgRx entity store with the Loadable Entity interface",
+      "factory": "./loadable-entity/index#loadableEntitySchematics",
+      "schema": "./loadable-entity/schema.json"
+    },
+    "paginated-table": {
+      "description": "Generates a filterable/sortable table",
+      "factory": "./table/index#tableSchematics",
+      "schema": "./table/schema.json"
+    }
+  }
+}

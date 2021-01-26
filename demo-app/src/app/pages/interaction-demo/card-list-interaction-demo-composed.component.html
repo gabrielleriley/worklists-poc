@@ -1,0 +1,85 @@
+<mat-form-field>
+    <mat-label>Loading State</mat-label>
+    <mat-select [(value)]="currentState">
+        <mat-option [value]="s" *ngFor="let s of states">{{s}}</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Entity State</mat-label>
+    <mat-select [(value)]="entityState">
+        <mat-option [value]="s" *ngFor="let s of entityStates">{{s}}</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<app-card-list [isLoading]="isLoading" [isPreloading]="isPreloading" [hasError]="hasError" [isEmpty]="entities.length === 0 && !hasError">
+    <app-card-list-fab-action-section>
+        <button mat-fab color="primary">
+            <mat-icon>add</mat-icon>
+        </button>
+    </app-card-list-fab-action-section>
+    <app-card-list-preloading-indicator></app-card-list-preloading-indicator>
+    <app-card-list-loading-indicator></app-card-list-loading-indicator>
+    <app-card-list-filters-section>
+        <ng-container *ngFor="let r of filterRows">
+            <mat-form-field>
+                <mat-label>Single Select</mat-label>
+                <mat-select>
+                    <mat-option value="1">Option 1</mat-option>
+                    <mat-option value="2">Option 2</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Multiple Select</mat-label>
+                <mat-select muliple>
+                    <mat-option value="1">Option 1</mat-option>
+                    <mat-option value="2">Option 2</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Loading State</mat-label>
+                <input matInput placeholder="Ex. Pizza" value="Sushi">
+            </mat-form-field>
+        </ng-container>
+
+    </app-card-list-filters-section>
+
+    <app-card-list-table-section *ngIf="entities.length > 0">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="progress">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
+                <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+
+            <!-- Color Column -->
+            <ng-container matColumnDef="color">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+                <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+    </app-card-list-table-section>
+
+    <app-card-list-empty-message>No people found</app-card-list-empty-message>
+    <app-card-list-error-message>
+        <mat-icon>warning</mat-icon>Failed to load people
+        <button mat-raised-button color="primary">Retry</button>     
+    </app-card-list-error-message>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</app-card-list>
