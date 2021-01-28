@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 export interface IUserPreference {
-    someData: number[];
+    nationalities: string[];
     otherData: number;
     anotherData: string;
 }

@@ -12,10 +12,10 @@
 
     <app-card-list-filters-section [formGroup]="searchForm">
         <mat-form-field>
-            <mat-label>Some Filter</mat-label>
-            <mat-select formControlName="someData" multiple>
-                <mat-option *ngFor="let someItem of someData$ | async" [value]="someItem.id">
-                    {{ someItem.name }}
+            <mat-label>Nationality</mat-label>
+            <mat-select formControlName="nationalities" multiple>
+                <mat-option *ngFor="let nationality of nationalities$ | async" [value]="nationality.id">
+                    {{ nationality.name }}
                 </mat-option>
             </mat-select>
         </mat-form-field>

@@ -9,6 +9,7 @@ import { ICardListComponent } from '@app/utils/interfaces';
 import { combineLatest, merge, Observable, Subject, BehaviorSubject } from 'rxjs';
 import { first, flatMap, map, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { UserPreferenceService, IUserPreference } from './user-preference.service';
+import { NationalityFacade } from '@app/data-stores/nationality';
 
 // TODO: REMOVE ME once you've setup your component!
 class MockEntityFacade {
@@ -33,7 +34,7 @@ interface IUserTableRow {
 }
 
 interface ISearchForm {
-    someData: number[];
+    nationalities: string[];
     otherData: number;
     anotherData: string;
 }
@@ -51,7 +52,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
         // TODO: remove @Inject decorator once table data is provided
         @Inject('table') private tableDataFacade: MockEntityFacade,
         // Note: If you have multiple select filters, you will have multiple 
-        private someDataFacade: MockEntityFacade,
+        private nationalityFacade: NationalityFacade,
         private otherDataFacade: MockEntityFacade,
         private preferenceService: UserPreferenceService
     ) { }
@@ -65,19 +66,19 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
     public readonly pageSize = 12;
     public tableForm = new PersistedTableSelections();
     public searchForm = <IFormGroup<ISearchForm>>this.formBuilder.group({
-        someData: new FormControl([]),
+        nationalities: new FormControl([]),
         otherData: new FormControl(undefined),
         anotherData: new FormControl(''),
     });
 
     // Async loaded select filter data sources
-    public someData$ = this.someDataFacade.entities$;
-    public otherData$ = this.someDataFacade.entities$;
+    public nationalities$ = this.nationalityFacade.entities$;
+    public otherData$ = this.nationalityFacade.entities$;
 
     // Wait until all filters have attempted to load at least once
     // We will consider the filter loaded even if the attempt fails to avoid having holding up form if a filter dropdown's data fails for some reason
     private filtersLoaded$: Observable<boolean> = combineLatest(
-        this.someDataFacade.loadAttemptCompleted$,
+        this.nationalityFacade.loadAttemptCompleted$,
         this.otherDataFacade.loadAttemptCompleted$
     ).pipe(onlyContainsValue(true));
 
@@ -103,7 +104,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
 
     public ngOnInit() {
         // Selectable filter data (locations, users, etc) will usually be loaded from a non-paginated data store
-        this.someDataFacade.loadAll();
+        this.nationalityFacade.loadAll();
         this.otherDataFacade.loadAll();
         // Once the filter data is loaded in, load in the table data
         
@@ -146,7 +147,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
 
     public clearFilters() {
         this.searchForm.setValue({
-            someData: [],
+            nationalities: [],
             otherData: undefined,
             anotherData: '',
         });
@@ -159,7 +160,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
     private setPreferredFilters(preference: IUserPreference) {
         if (preference) {
             this.searchForm.patchValue({
-                someData: preference.someData,
+                nationalities: preference.nationalities,
                 otherData: preference.otherData,
                 anotherData: preference.anotherData
             });
@@ -171,7 +172,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
             takeUntil(this.destroyed$)
         ).subscribe((formValue) => {
             this.preferenceService.setPreference({
-                someData: formValue.someData,
+                nationalities: formValue.nationalities,
                 otherData: formValue.otherData,
                 anotherData: formValue.anotherData
             });
