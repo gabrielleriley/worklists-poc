@@ -35,6 +35,12 @@ export namespace LoadableEntityFacade {
         isPerformingCustomActionByName(action: CustomActionType): Observable<boolean>;
         inProgressCustomActions$: Observable<ILoadableActionTimestamp<CustomActionType>[]>;
 
+        // Completed Actions
+        createCompletionTimestamps$: Observable<ILoadableActionTimestamp[]>;
+        updateCompletionTimestamps$: Observable<ILoadableActionTimestamp[]>;
+        patchCompletionTimestamps$: Observable<ILoadableActionTimestamp[]>;
+        deleteCompletionTimestamps$: Observable<ILoadableActionTimestamp[]>;
+
         // Error States
         hasCreateError$: Observable<boolean>;
         hasLoadError$: Observable<boolean>;
@@ -96,6 +102,12 @@ export namespace LoadableEntityFacade {
             return this.store.pipe(select(this.entitySelectors.isInProgressByCustomTypeName(name)))
         }
         inProgressCustomActions$: Observable<ILoadableActionTimestamp<CustomActionType>[]> = this.store.pipe(select(this.entitySelectors.inProgressByCustomType));
+        // Completed Actions
+        createCompletionTimestamps$: Observable<ILoadableActionTimestamp[]> = this.store.pipe(select(this.entitySelectors.completedActionsByType([LoadableAction.Create])));
+        updateCompletionTimestamps$: Observable<ILoadableActionTimestamp[]> = this.store.pipe(select(this.entitySelectors.completedActionsByType([LoadableAction.Update])));
+        patchCompletionTimestamps$: Observable<ILoadableActionTimestamp[]> = this.store.pipe(select(this.entitySelectors.completedActionsByType([LoadableAction.Patch])));;
+        deleteCompletionTimestamps$: Observable<ILoadableActionTimestamp[]> = this.store.pipe(select(this.entitySelectors.completedActionsByType([LoadableAction.DeleteByKey, LoadableAction.DeleteEntity])));;
+
         hasCreateError$: Observable<boolean> = this.store.pipe(select(this.entitySelectors.isFailedByType([LoadableAction.Create])));
         hasLoadError$: Observable<boolean> = this.store.pipe(select(this.entitySelectors.isFailedByType([LoadableAction.ReadAll, LoadableAction.ReadPage])));
         hasUpdateError$: Observable<boolean> = this.store.pipe(select(this.entitySelectors.isFailedByType([LoadableAction.Update])));

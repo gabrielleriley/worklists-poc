@@ -29,7 +29,7 @@ export class EntitySelector<EntityType, CustomActionType> {
         (state) => state.completedActions
     );
 
-    private completedActionsByType = (actions: LoadableAction[]) => createSelector(
+    public completedActionsByType = (actions: LoadableAction[]) => createSelector(
         this.completedActions,
         (timestamps) => this.filterByType(timestamps, actions)
     );

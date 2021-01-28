@@ -160,17 +160,17 @@ export namespace LoadableEntityReducer {
     // DELETE by Key actions
     export const onDeleteEntityByKeyRequestAction = <T, Key extends LoadableEntityTypeKey>(args: IActionArgs<T, Key>) => onActionTrigger(args, {
         loadableActionType: LoadableAction.DeleteByKey,
-        identity: args.props.payload
+        identity: args.props.identity
     });
 
     export const onDeleteEntityByKeySuccessAction = <T, Key extends LoadableEntityTypeKey>(args: IActionArgs<T, Key>) => onActionSuccess(args, {
         loadableActionType: LoadableAction.DeleteByKey,
-        identity: args.props.payload
+        identity: args.props.identity
     });
 
     export const onDeleteEntityByKeyFailureAction = <T, Key extends LoadableEntityTypeKey>(args: IActionArgs<T, Key>) => onActionFailure(args, {
         loadableActionType: LoadableAction.DeleteByKey,
-        identity: args.props.payload,
+        identity: args.props.identity,
         message: args.props.errorMessage
     });
 

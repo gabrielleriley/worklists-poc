@@ -16,6 +16,9 @@ export class PersistedTableSelections {
             .forEach((id) => this.formGroup.addControl(id.toString(), new FormControl(false)));
         this.currentPageIds.next(ids);
     }
+    public removeControlsForIds(ids: (string | number)[]) {
+        ids.filter((id) => this.formGroup.removeControl(id.toString()));
+    }
 
     private currentPageSelections = combineLatest(
         this.currentPageIds,
