@@ -10,6 +10,7 @@ import { combineLatest, merge, Observable, Subject, BehaviorSubject } from 'rxjs
 import { first, flatMap, map, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { UserPreferenceService, IUserPreference } from './user-preference.service';
 import { NationalityFacade } from '@app/data-stores/nationality';
+import { UserFacade } from '@app/data-stores/user';
 
 // TODO: REMOVE ME once you've setup your component!
 class MockEntityFacade {
@@ -28,9 +29,12 @@ class MockEntityFacade {
 }
 
 interface IUserTableRow {
-    id: string | number;
-    name: string;
-    favoriteAnimal: string;
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: string;
+    nationality: string;
 }
 
 interface ISearchForm {
@@ -43,14 +47,14 @@ interface ISearchForm {
     selector: 'app-user-table',
     templateUrl: 'user-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [{ provide: 'table', useFactory: () => new MockEntityFacade()}, MockEntityFacade] // TODO: Remove this row once you've setup your component
+    providers: [MockEntityFacade] // TODO: Remove this row once you've setup your component
 })
 export class UserTableComponent implements ICardListComponent<IUserTableRow>, OnInit, AfterViewInit, OnDestroy {
     constructor(
         private formBuilder: FormBuilder,
         // TODO: Replace these mock facades with your actual facades
         // TODO: remove @Inject decorator once table data is provided
-        @Inject('table') private tableDataFacade: MockEntityFacade,
+        private tableDataFacade: UserFacade,
         // Note: If you have multiple select filters, you will have multiple 
         private nationalityFacade: NationalityFacade,
         private otherDataFacade: MockEntityFacade,
@@ -62,13 +66,14 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
 
     private destroyed$ = new Subject<void>();
     // The displayedColumns property determines what order table columns display
-    public readonly displayedColumns = ['select','actions','id', 'favoriteAnimal'];
+    public readonly displayedColumns = ['select','actions','id', 'firstName', 'lastName', 'email', 'gender', 'nationality'];
     public readonly pageSize = 12;
     public tableForm = new PersistedTableSelections();
     public searchForm = <IFormGroup<ISearchForm>>this.formBuilder.group({
         nationalities: new FormControl([]),
         otherData: new FormControl(undefined),
         anotherData: new FormControl(''),
+        lastName: new FormControl(''),
     });
 
     // Async loaded select filter data sources
@@ -95,7 +100,14 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
         }),
         map((entities) => {
             // map your state entities to your table row VM
-            return entities.map((e) => ({ id: e.id, name: e.name, favoriteAnimal: 'cat' }));
+            return entities.map((e) => ({ 
+                id: e.id, 
+                firstName: e.name.first,
+                lastName: e.name.last,
+                email: e.email,
+                gender: e.gender,
+                nationality: e.nationalityCode
+            }));
         })
     );
     public totalEntitiesCount$: Observable<number> = this.tableDataFacade.totalEntitiesCount$;
@@ -114,7 +126,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
                 tap((preference) => this.setPreferredFilters(preference))
             ))
         ).subscribe((preference: IUserPreference) => {
-            this.tableDataFacade.loadPage({ page: 0, pageSize: this.pageSize }, preference ? { 
+            this.tableDataFacade.loadPage({ pageIndex: 0, pageSize: this.pageSize }, preference ? { 
                 // TODO: Map your preference object into your search criteria interface
                 // This is also the time to include any other default criteria settings!
             } : undefined);
