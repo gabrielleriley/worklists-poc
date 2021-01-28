@@ -98,7 +98,8 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
             const ids = entities.map((e) => e.id);
             this.tableForm.addControlsForIds(ids);
         }),
-        map((entities) => {
+        withLatestFrom(this.nationalityFacade.entities$),
+        map(([entities, nationalities]) => {
             // map your state entities to your table row VM
             return entities.map((e) => ({ 
                 id: e.id, 
@@ -106,7 +107,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
                 lastName: e.name.last,
                 email: e.email,
                 gender: e.gender,
-                nationality: e.nationalityCode
+                nationality: nationalities.find(n => n.id === e.nationalityCode)?.name
             }));
         })
     );
