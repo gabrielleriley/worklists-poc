@@ -120,31 +120,31 @@ export class EntityEffectsHelper<Entity> {
     public createEntityCreateEffect({ triggerAction, successAction, errorAction }
         : { triggerAction: EntityActionCreator<Entity>; successAction: EntityActionCreator<Entity>, errorAction: EntityActionCreator<Entity> }) {
         this.checkForServiceMethod('create');
-        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.Create, serviceMethod: this.entityService.create });
+        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.Create, serviceMethod: (entity) => this.entityService.create(entity) });
     }
 
     public createEntityUpdateEffect({ triggerAction, successAction, errorAction }
         : { triggerAction: EntityActionCreator<Entity>; successAction: EntityActionCreator<Entity>, errorAction: EntityActionCreator<Entity> }) {
         this.checkForServiceMethod('update');
-        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.Update, serviceMethod: this.entityService.update });
+        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.Update, serviceMethod: (entity) => this.entityService.update(entity) });
     }
 
     public createEntityPatchEffect({ triggerAction, successAction, errorAction }
         : { triggerAction: EntityActionCreator<Entity>; successAction: EntityActionCreator<Entity>, errorAction: EntityActionCreator<Entity> }) {
         this.checkForServiceMethod('patch');
-        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.Patch, serviceMethod: this.entityService.patch });
+        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.Patch, serviceMethod: (entity) => this.entityService.patch(entity) });
     }
 
     public createEntityDeleteEffect({ triggerAction, successAction, errorAction }
         : { triggerAction: EntityActionCreator<Entity>; successAction: EntityActionCreator<Entity>, errorAction: EntityActionCreator<Entity> }) {
         this.checkForServiceMethod('delete');
-        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.DeleteEntity, serviceMethod: this.entityService.delete });
+        return this.createMergedEntityEffect<Entity>({ triggerAction, successAction, errorAction, actionType: LoadableAction.DeleteEntity, serviceMethod: (entity) => this.entityService.delete(entity) });
     }
 
     public createEntityDeleteByKeyEffect({ triggerAction, successAction, errorAction }
         : { triggerAction: EntityActionCreator<LoadableEntityTypeKey>; successAction: EntityActionCreator<LoadableEntityTypeKey>, errorAction: EntityActionCreator<LoadableEntityTypeKey> }) {
         this.checkForServiceMethod('deleteByKey');
-        return this.createMergedEntityEffect<LoadableEntityTypeKey>({ triggerAction, successAction, errorAction, actionType: LoadableAction.DeleteEntity, serviceMethod: this.entityService.deleteByKey });
+        return this.createMergedEntityEffect<LoadableEntityTypeKey>({ triggerAction, successAction, errorAction, actionType: LoadableAction.DeleteEntity, serviceMethod: (key) => this.entityService.deleteByKey(key) });
     }
 
     public createRefetchAllEffect(refetchAfter: ActionCreator[], fetchAllAction: EntityActionCreator<Entity[]>) {
