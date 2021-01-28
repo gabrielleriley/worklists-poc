@@ -7,10 +7,11 @@ import { onlyContainsValue } from '@app/utils/pipes';
 import { IFormGroup } from '@rxweb/types';
 import { ICardListComponent } from '@app/utils/interfaces';
 import { combineLatest, merge, Observable, Subject, BehaviorSubject } from 'rxjs';
-import { first, flatMap, map, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { first, flatMap, map, takeUntil, tap, withLatestFrom, filter } from 'rxjs/operators';
 import { UserPreferenceService, IUserPreference } from './user-preference.service';
 import { NationalityFacade } from '@app/data-stores/nationality';
 import { UserFacade, IUserQueryCriteria } from '@app/data-stores/user';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface IUserTableRow {
     id: string;
@@ -37,7 +38,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
         private formBuilder: FormBuilder,
         private tableDataFacade: UserFacade,
         private nationalityFacade: NationalityFacade,
-        private preferenceService: UserPreferenceService
+        private preferenceService: UserPreferenceService,
     ) { }
 
     @ViewChild(MatSort) public matSort: MatSort;
@@ -101,7 +102,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
                 tap((preference) => this.setPreferredFilters(preference))
             ))
         ).subscribe((preference: IUserPreference) => {
-            this.tableDataFacade.loadPage({ pageIndex: 0, pageSize: this.pageSize }, preference ?? { });
+            this.tableDataFacade.loadPage({ pageIndex: 0, pageSize: this.pageSize }, preference ?? {});
         });
     }
 
@@ -163,6 +164,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
 
     public deleteUser(id) {
         this.tableDataFacade.deleteByKey(id);
+        this.tableForm.removeControlsForIds([id]);
     }
 
 }
