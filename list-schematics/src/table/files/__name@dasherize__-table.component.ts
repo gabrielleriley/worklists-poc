@@ -66,7 +66,7 @@ export class <%= classify(name) %>TableComponent implements ICardListComponent<I
     <%if(selectable) {%>public tableForm = new PersistedTableSelections();<%}%>
     public searchForm = <IFormGroup<ISearchForm>>this.formBuilder.group({
         someData: new FormControl([]),
-        otherData: new FormControl(undefined),
+        otherData: new FormControl(''),
         anotherData: new FormControl(''),
     });
 
@@ -113,7 +113,7 @@ export class <%= classify(name) %>TableComponent implements ICardListComponent<I
                 tap((preference) => this.setPreferredFilters(preference))
             ))
         ).subscribe((preference: I<%= classify(name) %>Preference) => {
-            this.tableDataFacade.loadPage({ page: 0, pageSize: this.pageSize }, preference ? { 
+            this.tableDataFacade.loadPage({ pageIndex: 0, pageSize: this.pageSize }, preference ? { 
                 // TODO: Map your preference object into your search criteria interface
                 // This is also the time to include any other default criteria settings!
             } : undefined);
@@ -154,7 +154,7 @@ export class <%= classify(name) %>TableComponent implements ICardListComponent<I
     public clearFilters() {
         this.searchForm.setValue({
             someData: [],
-            otherData: undefined,
+            otherData: '',
             anotherData: '',
         });
     }
