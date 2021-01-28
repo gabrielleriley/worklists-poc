@@ -58,11 +58,8 @@
                         <mat-icon>menu</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="sayHi(row.id)">
-                            Say Hello in console
-                        </button>
-                        <button mat-menu-item disabled>
-                            Nope.
+                        <button mat-menu-item (click)="deleteUser(row.id)">
+                            Delete
                         </button>
                     </mat-menu>
                 </td>

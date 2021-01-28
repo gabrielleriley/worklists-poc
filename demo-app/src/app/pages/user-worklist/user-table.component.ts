@@ -161,8 +161,8 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
         });
     }
 
-    public sayHi(id) {
-        console.log(`Hi from row: ${id}!`);
+    public deleteUser(id) {
+        this.tableDataFacade.deleteByKey(id);
     }
 
 }
