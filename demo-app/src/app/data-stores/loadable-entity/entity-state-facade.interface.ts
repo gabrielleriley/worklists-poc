@@ -68,7 +68,7 @@ export namespace LoadableEntityFacade {
     }
 
     export interface PatchFacade<Entity> {
-        patch(entity: Entity): void;
+        patch(entity: Partial<Entity>): void;
     }
 
     export interface DeleteFacade<Entity> {
@@ -129,7 +129,7 @@ export namespace LoadableEntityFacade {
 
     export class EntityFacadeBuilder<EntityType, CustomActionType = {}> {
         constructor(
-            keySelector: IEntityKeySelector
+            private keySelector: IEntityKeySelector
         ) { }
         private _class: Constructor<{}> = class extends StateSelectorFacade<EntityType, CustomActionType> { };
 
@@ -148,12 +148,12 @@ export namespace LoadableEntityFacade {
             return this;
         }
 
-        public addLoadPageInterface(loadAction: EntityPageActionCreator<EntityType>) {
+        public addLoadPageInterface<Criteria = {}>(loadAction: EntityPageActionCreator<EntityType>) {
             this._class = class extends this._class implements LoadPageFacade {
                 constructor(...args: any[]) {
                     super(...args);
                 }
-                loadPage(page: ILoadablePageInfo, criteria?: {}): void {
+                loadPage(page: ILoadablePageInfo, criteria?: Criteria): void {
                     (this as unknown as StateSelectorFacade<EntityType, CustomActionType>).store.dispatch(loadAction({
                         loadableActionType: LoadableAction.ReadPage,
                         criteria,
@@ -176,26 +176,38 @@ export namespace LoadableEntityFacade {
             return this;
         }
 
-        public addPatchInterface(patchAction: Action): StoreConstructor<PatchFacade<EntityType>> {
-            return class extends this._class implements PatchFacade<EntityType> {
+        public addPatchInterface(patchEntityAction: EntityActionCreator<Partial<EntityType>>) {
+            const ks = this.keySelector;
+            this._class = class extends this._class implements PatchFacade<EntityType> {
                 constructor(...args: any[]) {
                     super(...args);
                 }
-                patch(entity: EntityType): void {
-                    throw new Error("Method not implemented.");
+                patch(entity: Partial<EntityType>): void {
+                    (this as unknown as StateSelectorFacade<EntityType, CustomActionType>).store.dispatch(patchEntityAction({
+                        loadableActionType: LoadableAction.Patch,
+                        payload: entity,
+                        identity: ks(entity)
+                    }));
                 }
             };
+            return this;
         }
 
-        public addDeleteInterface(deleteEntityAction: Action): StoreConstructor<DeleteFacade<EntityType>> {
-            return class extends this._class implements DeleteFacade<EntityType> {
+        public addDeleteInterface(deleteEntityAction: EntityActionCreator<EntityType>) {
+            const ks = this.keySelector;
+            this._class = class extends this._class implements DeleteFacade<EntityType> {
                 constructor(...args: any[]) {
                     super(...args);
                 }
                 delete(entity: EntityType): void {
-                    throw new Error("Method not implemented.");
+                    (this as unknown as StateSelectorFacade<EntityType, CustomActionType>).store.dispatch(deleteEntityAction({
+                        loadableActionType: LoadableAction.Patch,
+                        payload: entity,
+                        identity: ks(entity)
+                    }));
                 }
             };
+            return this;
         }
 
         public addDeleteByKeyInterface<Key extends LoadableEntityTypeKey>(deleteEntityAction: EntityActionCreator<Key>) {

@@ -9,7 +9,7 @@ import { <%= classify(name) %>EntityService } from './<%= dasherize(name) %>-ent
 import { <%= classify(name) %>Facade } from './<%= dasherize(name) %>.facade';
 import { select<%= capitalize(name) %>Id } from './<%= dasherize(name) %>.entity';
 
-const entity = new InjectionToken('Person');
+const entity = new InjectionToken('<%= camelize(name) %>-entity-service');
 @NgModule({
     imports: [
         StoreModule.forFeature(<%= camelize(name) %>StateName, <%= camelize(name) %>Reducer),
