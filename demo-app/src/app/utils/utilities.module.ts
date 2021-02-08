@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { CardListErrorMessageComponent, CardListFabActionSectionComponent, CardListNoItemsMessageComponent, CardTableComponent, CardTableFilterSectionComponent, CardTableLoadingIndicatorComponent, CardTablePaginationSectionComponent, CardTablePreloadIndicatorComponent, CardTableTableSectionComponent, TableListSelectionContainerComponent, TableRowCheckbox, TableRowMasterCheckbox } from './wrappers/card-list.component';
+import { CardListErrorMessageComponent, CardListFabActionSectionComponent, CardListNoItemsMessageComponent, CardTableComponent, CardTableFilterSectionComponent, CardTableLoadingIndicatorComponent, CardTablePaginationSectionComponent, CardTablePreloadIndicatorComponent, CardTableTableSectionComponent } from './wrappers/card-list.component';
 
 
 const matModules = [
@@ -40,15 +40,10 @@ const components = [
     CardListErrorMessageComponent
 ];
 
-const directives = [
-    TableListSelectionContainerComponent,
-    TableRowCheckbox,
-    TableRowMasterCheckbox
-]
 
 @NgModule({
     imports: [CommonModule, FlexLayoutModule, ...matModules],
-    declarations: [...components, ...directives],
-    exports: [...components, ...directives]
+    declarations: [...components],
+    exports: [...components]
 })
 export class UtilitiesModule { }
