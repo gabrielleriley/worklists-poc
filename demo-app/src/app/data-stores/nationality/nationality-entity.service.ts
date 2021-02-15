@@ -20,7 +20,6 @@ export class NationalityEntityService implements ILoadableEntityService<INationa
                     return { id: nationality.code, name: nationality.name }
                 })
             })
-        )
-            
+        )    
     }
 }

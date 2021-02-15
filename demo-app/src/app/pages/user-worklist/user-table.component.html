@@ -70,13 +70,33 @@
                         
             <!-- Apply the mat-sort-header attribute to any columns you have implemented sorting for -->
             <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Id</th>
+                <th mat-header-cell *matHeaderCellDef>Id</th>
                 <td mat-cell *matCellDef="let row">{{row.id}}</td>
             </ng-container>
 
-            <ng-container matColumnDef="favoriteAnimal">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Favorite Animal</th>
-                <td mat-cell *matCellDef="let row">{{row.favoriteAnimal}}</td>
+            <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">First Name</th>
+                <td mat-cell *matCellDef="let row">{{row.firstName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Last Name</th>
+                <td mat-cell *matCellDef="let row">{{row.lastName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="gender">
+                <th mat-header-cell *matHeaderCellDef>Gender</th>
+                <td mat-cell *matCellDef="let row">{{row.gender}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true">Email</th>
+                <td mat-cell *matCellDef="let row">{{row.email}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nationality">
+                <th mat-header-cell *matHeaderCellDef>Nationality</th>
+                <td mat-cell *matCellDef="let row">{{row.nationality}}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

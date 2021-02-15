@@ -13,6 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UtilitiesModule } from '@app/utils';
 import { UserTableComponent } from './user-table.component';
 import { NationalityEntityStateModule } from '@app/data-stores/nationality';
+import { UserEntityStateModule } from '@app/data-stores/user';
 
 // Import any Angular Material components needed for your feature
 // https://material.angular.io/components
@@ -34,7 +35,8 @@ const matModules = [
         ReactiveFormsModule,
         UtilitiesModule,
         ...matModules,
-        NationalityEntityStateModule
+        NationalityEntityStateModule,
+        UserEntityStateModule
         // TODO: Add any necessary state modules
     ],
     declarations: [
