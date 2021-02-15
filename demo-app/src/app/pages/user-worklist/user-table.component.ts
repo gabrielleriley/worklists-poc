@@ -66,7 +66,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
     public readonly pageSize = 12;
     public tableForm = new PersistedTableSelections();
     public searchForm = <IFormGroup<ISearchForm>>this.formBuilder.group({
-        someData: new FormControl([]),
+        nationalities: new FormControl([]),
         otherData: new FormControl(''),
         anotherData: new FormControl(''),
     });

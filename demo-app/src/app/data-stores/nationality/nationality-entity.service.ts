@@ -15,8 +15,8 @@ export class NationalityEntityService implements ILoadableEntityService<INationa
 
     loadAll(): Observable<INationalityEntity[]> {
         return this.dataService.getNationalities().pipe(
-            map(val => {
-                return val.map(nationality => {
+            map(payload => {
+                return payload.data.map(nationality => {
                     return { id: nationality.code, name: nationality.name }
                 })
             })
