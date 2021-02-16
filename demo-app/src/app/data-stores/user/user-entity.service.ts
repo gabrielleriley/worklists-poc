@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IPayload, IUserDTO } from '@app/api-models';
 import { IUserQueryParams } from '@app/api-models/user-query-params.interface';
 import { UserDataService } from '@app/api-services/user-data-service';
-import { ILoadableEntityService, ILoadablePageInfo, IPagedPayload } from '@app/data-stores/loadable-entity';
+import { IEntityErrorPayload, ILoadableEntityService, ILoadablePageInfo, IPagedPayload, LoadableEntityTypeKey } from '@app/data-stores/loadable-entity';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -55,5 +55,13 @@ export class UserEntityService implements ILoadableEntityService<IUserEntity ,IU
                 nationality: user.nationality, 
             }
         })
+    }
+
+    // deleteByKey?(key: LoadableEntityTypeKey): Observable<LoadableEntityTypeKey | IEntityErrorPayload>;
+
+    deleteByKey(userId: LoadableEntityTypeKey): Observable<LoadableEntityTypeKey | IEntityErrorPayload> {
+        return this.dataService.deleteUser('userId').pipe(
+            map(() => userId)
+        )
     }
 }

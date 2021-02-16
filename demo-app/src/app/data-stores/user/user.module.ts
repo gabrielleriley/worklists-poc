@@ -8,12 +8,14 @@ import { provideEntityEffectsHelper } from '@app/data-stores/loadable-entity';
 import { UserEntityService } from './user-entity.service';
 import { UserFacade } from './user.facade';
 import { selectUserId } from './user.entity';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 const entity = new InjectionToken('Person');
 @NgModule({
     imports: [
         StoreModule.forFeature(userStateName, userReducer),
-        EffectsModule.forFeature([UserEntityEffects])
+        EffectsModule.forFeature([UserEntityEffects]),
+        MatSnackBarModule
     ],
     providers: [
         UserEntityService,

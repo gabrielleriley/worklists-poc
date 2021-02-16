@@ -5,6 +5,8 @@ import { IUserDTO } from "@app/api-models/user-dto.interface";
 import { IUserQueryParams } from "@app/api-models/user-query-params.interface";
 import { Observable } from "rxjs";
 import { HttpParams} from "@angular/common/http";
+import { IEntityErrorPayload, LoadableEntityTypeKey } from "@app/data-stores/loadable-entity";
+import { map } from "rxjs/operators";
 
 @Injectable({ providedIn: 'root' })
 export class UserDataService {
@@ -65,7 +67,8 @@ export class UserDataService {
         return this.http.get<number>('http://localhost:3000/user/count', {params: params});
     }
 
-    public deleteUser(id: string): void {
-        this.http.delete('http://localhost:3000/user/'+id);
-    }
+    public deleteUser(id: LoadableEntityTypeKey): Observable<void> {
+        return this.http.delete('http://localhost:3000/user/'+id).pipe(
+            map(() => undefined)
+        )};
 }
