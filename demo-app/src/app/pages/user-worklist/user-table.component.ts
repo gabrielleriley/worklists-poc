@@ -10,7 +10,7 @@ import { combineLatest, merge, Observable, Subject, BehaviorSubject } from 'rxjs
 import { first, flatMap, map, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { UserPreferenceService, IUserPreference } from './user-preference.service';
 import { NationalityFacade } from '@app/data-stores/nationality';
-import { UserFacade } from '@app/data-stores/user';
+import { IUserQueryCriteria, UserFacade } from '@app/data-stores/user';
 
 // TODO: REMOVE ME once you've setup your component!
 class MockEntityFacade {
@@ -138,7 +138,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
     public ngAfterViewInit() {
         this.monitorAndSaveFilterPreferences();
         merge(
-            this.matPaginator.page.pipe(map(() => ({}))),
+            this.matPaginator.page.pipe(map(() => ({}))), //ideally do a combineLatest with two streams see notes...
             // this.matSort.sortChange.pipe(map((sortChange) => {
             //     // Map the sort change object into a partial of your criteria interface, if needed. 
             //     // Otherwise, remove this map pipe.
@@ -163,7 +163,7 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
                     lastName: formValue.lastName
                 };
             }))
-        ).subscribe((change: Partial<any>) => {
+        ).subscribe((change: Partial<IUserQueryCriteria>) => {
             // TODO: ^ change <any> to the table entity's query criteria interface
             this.tableDataFacade.loadPage({ pageIndex: this.matPaginator.pageIndex, pageSize: this.matPaginator.pageSize }, change);
         });

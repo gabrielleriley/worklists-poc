@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IPayload, IUserDTO } from '@app/api-models';
+import { IUserQueryParams } from '@app/api-models/user-query-params.interface';
 import { UserDataService } from '@app/api-services/user-data-service';
 import { ILoadableEntityService, ILoadablePageInfo, IPagedPayload } from '@app/data-stores/loadable-entity';
 import { forkJoin, Observable } from 'rxjs';
@@ -15,7 +16,7 @@ export class UserEntityService implements ILoadableEntityService<IUserEntity ,IU
     constructor(private dataService: UserDataService) {}
 
     loadPage(pageInfo: ILoadablePageInfo, criteria: IUserQueryCriteria): Observable<IPagedPayload<IUserEntity>> {
-        return forkJoin([this.dataService.getUsers(),this.dataService.getUserCount()]).pipe(
+        return forkJoin([this.dataService.getUsers(this.mapCriteriaToParams(criteria,pageInfo)),this.dataService.getUserCount(this.mapCriteriaToParams(criteria,pageInfo))]).pipe(
             map(([users, userCount]) => {
                 console.log('entity service: ', users);
                 return {
@@ -25,6 +26,18 @@ export class UserEntityService implements ILoadableEntityService<IUserEntity ,IU
                 }
             })
         ) 
+    }
+
+    mapCriteriaToParams(criteria: IUserQueryCriteria, pageInfo: ILoadablePageInfo): IUserQueryParams {
+        return {
+            lastName: criteria.lastName,
+            genders: criteria.gender,
+            nationalites: criteria.nationalities,
+            sortColumn: criteria.sortColumn,
+            order: criteria.direction,
+            page: pageInfo.pageIndex,
+            size: pageInfo.pageSize
+        } 
     }
 
     createUserData(payload: IPayload<IUserDTO[]>): IUserEntity[] {
