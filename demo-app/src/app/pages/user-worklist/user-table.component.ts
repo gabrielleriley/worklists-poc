@@ -11,6 +11,7 @@ import { first, flatMap, map, takeUntil, tap, withLatestFrom } from 'rxjs/operat
 import { UserPreferenceService, IUserPreference } from './user-preference.service';
 import { NationalityFacade } from '@app/data-stores/nationality';
 import { UserFacade } from '@app/data-stores/user';
+import { table } from 'console';
 
 // TODO: REMOVE ME once you've setup your component!
 class MockEntityFacade {
@@ -93,23 +94,29 @@ export class UserTableComponent implements ICardListComponent<IUserTableRow>, On
     );
     public isLoading$: Observable<boolean> = this.tableDataFacade.isLoading$;
 
-    public entities$: Observable<IUserTableRow[]> = this.tableDataFacade.entities$.pipe(
-        tap((entities) => {
-            const ids = entities.map((e) => e.id);
-            this.tableForm.addControlsForIds(ids);
-        }),
-        map((entities) => {
-            // map your state entities to your table row VM
-            return entities.map((e) => ({ 
-                id: e.id, 
-                firstName: e.name.first,
-                lastName: e.name.last,
-                gender: e.gender,
-                email: e.email,
-                nationality: e.nationality,
-            }));
-        })
-    );
+    public entities$: Observable<IUserTableRow[]> = combineLatest(
+            [this.tableDataFacade.entities$,
+            this.nationalityFacade.entities$]
+        )
+        .pipe(
+            tap(([tableData,nationalityData]) => {
+                const ids = tableData.map((e) => e.id);
+                this.tableForm.addControlsForIds(ids);
+            }),
+            map(([tableData, nationalityData]) => {
+                // map your state entities to your table row VM
+                return tableData.map((e) => ({ 
+                        id: e.id, 
+                        firstName: e.name.first,
+                        lastName: e.name.last,
+                        gender: e.gender,
+                        email: e.email,
+                        nationality: e.nationality,
+                    })
+                )}
+            )
+        )
+
     public totalEntitiesCount$: Observable<number> = this.tableDataFacade.totalEntitiesCount$;
     public isEmptyList$ = this.totalEntitiesCount$.pipe(map((cnt) => cnt === 0));
     public displayTableError$: Observable<boolean> = this.tableDataFacade.hasLoadError$;
