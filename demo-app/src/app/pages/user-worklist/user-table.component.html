@@ -21,17 +21,16 @@
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Other Filter</mat-label>
-            <mat-select formControlName="otherData">
-                <mat-option *ngFor="let otherItem of otherData$ | async" [value]="otherItem.id">
-                    {{ otherItem.name }}
-                </mat-option>
+            <mat-label>Gender Filter</mat-label>
+            <mat-select formControlName="gender">
+                <mat-option value="male">male</mat-option>
+                <mat-option value="female">female</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Another Filter</mat-label>
-            <input formControlName="anotherData" matInput placeholder="Something?">
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" matInput placeholder="Last Name">
         </mat-form-field>
     </app-card-list-filters-section>
     <app-card-list-table-section>

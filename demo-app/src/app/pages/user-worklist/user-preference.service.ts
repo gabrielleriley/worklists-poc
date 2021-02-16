@@ -4,8 +4,8 @@ import { delay } from 'rxjs/operators';
 
 export interface IUserPreference {
     nationalities: string[];
-    otherData: number;
-    anotherData: string;
+    gender: string;
+    lastName: string;
 }
 
 /**
