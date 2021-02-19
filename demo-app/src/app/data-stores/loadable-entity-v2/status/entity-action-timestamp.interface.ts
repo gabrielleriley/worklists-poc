@@ -20,3 +20,10 @@ export interface IEntityStatusState {
     inProgressActions: IEntityActionTimestamp[];
     failedActions: IEntityActionTimestamp[];
 }
+
+export const entityStatusInitialState: IEntityStatusState = {
+    completedActions: [],
+    inProgressActions: [],
+    failedActions: []
+};
+
