@@ -1,10 +1,8 @@
-import { Component, Input, ChangeDetectionStrategy, Directive, ContentChildren, AfterContentInit, QueryList, ElementRef, OnDestroy, OnInit, ChangeDetectorRef } from "@angular/core";
-import { MatSelect } from '@angular/material/select';
-import { MatCheckbox, TransitionCheckState } from '@angular/material/checkbox';
-import { FormControl, ControlValueAccessor, FormArray } from '@angular/forms';
-import { Subject, interval } from 'rxjs';
-import { takeUntil, debounceTime, filter } from 'rxjs/operators';
-import { registerLocaleData } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input, Output, OnInit, OnDestroy, EventEmitter, OnChanges, Directive } from "@angular/core";
+import { FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { KeyValue } from '@angular/common';
 
 @Component({
     selector: 'app-card-list-preloading-indicator',
@@ -28,12 +26,10 @@ export class CardTablePreloadIndicatorComponent { }
 })
 export class CardTableLoadingIndicatorComponent { }
 
-@Component({
-    selector: 'app-card-list-fab-action-section',
-    template: `<ng-content></ng-content>`,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+@Directive({
+    selector: `[appTableFabActionSection]`
 })
-export class CardListFabActionSectionComponent { }
+export class CardListFabActionSectionDirective { }
 
 @Component({
     selector: 'app-card-list-filters-section',
@@ -71,13 +67,6 @@ export class CardListNoItemsMessageComponent { }
 export class CardListErrorMessageComponent { }
 
 @Component({
-    selector: 'app-card-list-paginator-section',
-    template: `<ng-content></ng-content>`,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class CardTablePaginationSectionComponent { }
-
-@Component({
     selector: 'app-card-list',
     templateUrl: './card-list.component.html',
     styleUrls: ['./loading-shade.scss'],
@@ -94,132 +83,68 @@ export class CardTableComponent {
     }
 }
 
-@Directive({
-    selector: '[appTableCheckboxId]'
+@Component({
+    selector: 'app-page-jumper',
+    template: `
+    <span class="mat-paginator-page-size-label">Page: </span>
+    <mat-form-field>
+        <mat-select [formControl]="pageSelectionFC">          
+            <mat-option *ngFor="let o of options" [value]="o.key">{{o.value}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    `,
+    styleUrls: ['./loading-shade.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableRowCheckbox implements OnInit, OnDestroy {
-    constructor(private checkbox: MatCheckbox, private parent: TableListSelectionContainerComponent) { }
+export class CardTablePageJumper implements OnInit, OnDestroy, OnChanges {
+    @Input() pageSize = 0;
+    @Input() totalCount = 0;
+    @Input() pageIndex = 0;
+    @Output() pageSelect = new EventEmitter();
+    pageSelectionFC = new FormControl(0);
+    options = [];
 
-    private destroyed$ = new Subject();
-    @Input('appTableCheckboxId') public checkboxId: string | number;
+    private destroyed$ = new Subject<void>();
 
-    public get checked() {
-        return this.checkbox.checked;
-    }
-    ngOnInit() {
-        this.checkbox.writeValue(this.parent.getDefaultValue(this.checkboxId));
-        this.checkbox.change.pipe(
+    ngOnInit(): void {
+        this.pageSelectionFC.valueChanges.pipe(
             takeUntil(this.destroyed$),
-        ).subscribe((change) => {
-            this.parent.setIsChecked(this.checkboxId, change.checked);
+        ).subscribe((pageIndex) => {
+            this.pageSelect.emit(pageIndex);
         });
     }
 
-    ngOnDestroy() {
-        this.parent.deregister(this.checkboxId);
+    ngOnDestroy(): void {
         this.destroyed$.next();
     }
-}
 
-@Directive({
-    selector: '[appTableMainCheckbox]'
-})
-export class TableRowMasterCheckbox implements OnInit {
-    constructor(
-        private checkbox: MatCheckbox,
-        private parent: TableListSelectionContainerComponent,
-        private cdr: ChangeDetectorRef
-    ) { }
-    ngOnInit(): void {
-        this.parent.registerMainCheckbox(this);
-    }
-
-    public setIndeterminate() {
-        if (!this.checkbox.indeterminate) {
-            console.log('INDETERMINATE');
-            this.checkbox.checked = true;
-            this.checkbox.indeterminate = true;
-        }
-    }
-
-    public setChecked(s: boolean) {
-        if (s !== this.checkbox.checked || this.checkbox.indeterminate) {
-            console.log('SET MAIN CHECKED: ' + s);
-            if (s) {
-                this.checkbox.indeterminate = false;
-            }
-            this.checkbox.checked = s;
-
-            if (!s) {
-                this.checkbox.indeterminate = false;
-            }
-        }
-    }
-}
-
-@Directive({
-    selector: '[appTableSelectable]',
-})
-export class TableListSelectionContainerComponent implements OnInit {
-    constructor(private cdr: ChangeDetectorRef) { }
-    @ContentChildren(TableRowCheckbox, { descendants: true }) public checks: QueryList<TableRowCheckbox>;
-    //@Input() public formArray: FormArray;
-    @Input() public formControl: FormControl = new FormControl([]);
-    @Input() public numberOfRows: number;
-
-    private registeredIds = [];
-    private statuses = {};
-    private mainCheckbox: TableRowMasterCheckbox;
-    ngOnInit(): void {
-
-    }
-    getDefaultValue(id: string | number) {
-        const selected = this.formControl.value.some((v) => v === id);
-        this.statuses = { ...this.statuses, ...{ [id]: selected } };
-        //this.formArray.push(new FormControl(selected));
-        this.registeredIds.push(id);
-        this.setPageSelectionStatus();        
-        this.cdr.detectChanges();
-        return selected;
-    }
-
-    deregister(id: string | number) {
-        this.registeredIds = this.registeredIds.filter((rId) => rId !== id);
-        this.setPageSelectionStatus();
-    }
-
-    registerMainCheckbox(checkbox: TableRowMasterCheckbox) {
-        this.mainCheckbox = checkbox;
-    }
-
-    setIsChecked(id: string | number, checked: boolean) {
-        if (checked) {
-            this.formControl.setValue([...this.formControl.value, id]);
+    ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+        if (changes['pageSize'] || changes['totalCount']) {
+            this.options = this.setOptions(this.totalCount, this.pageSize);
         } else {
-            this.formControl.setValue([...this.formControl.value.filter((v) => v === id)]);
+            this.pageSelectionFC.setValue(changes['pageIndex'].currentValue, { emitEvent: false });
         }
-        this.statuses = { ...this.statuses, ...{ [id]: checked } }
-        this.setPageSelectionStatus();
     }
 
-    setPageSelectionStatus() {
-        let someSelected = false;
-        const allSelected = this.registeredIds.every((id) => {
-            const selected = this.statuses[id];
-            if (selected) {
-                someSelected = true;
-            }
-            return selected === true;
-        });
-        if (someSelected) {
-            if (allSelected) {
-                this.mainCheckbox.setChecked(true);
-            } else {
-                this.mainCheckbox.setIndeterminate();
-            }
-        } else {
-            this.mainCheckbox.setChecked(false);
+    private setOptions(itemCount: number, pageSize: number): KeyValue<number, string>[] {
+        const pageOptions = [];
+        if (pageSize === 0 || itemCount === 0) {
+            return pageOptions;
         }
+
+        const totalPages = itemCount / pageSize;
+        const remainder = itemCount % pageSize;
+        let startingItemCount = 1;
+        for (let i = 0; i <= totalPages; i++) {
+            if (remainder === 0 && i === totalPages) {
+                continue;
+            }
+            const shownPage = i + 1;
+            const endingItemCount = shownPage * pageSize;
+            const pageOptionText = `${shownPage.toString()} (${startingItemCount} - ${endingItemCount})`;
+            pageOptions.push({ key: i, value: pageOptionText});
+            startingItemCount = endingItemCount + 1;
+        }
+        return pageOptions;
     }
 }
-

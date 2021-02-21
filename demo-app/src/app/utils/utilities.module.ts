@@ -12,7 +12,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { CardListErrorMessageComponent, CardListFabActionSectionComponent, CardListNoItemsMessageComponent, CardTableComponent, CardTableFilterSectionComponent, CardTableLoadingIndicatorComponent, CardTablePaginationSectionComponent, CardTablePreloadIndicatorComponent, CardTableTableSectionComponent, TableListSelectionContainerComponent, TableRowCheckbox, TableRowMasterCheckbox } from './wrappers/card-list.component';
+import { CardListErrorMessageComponent, CardListFabActionSectionDirective, CardListNoItemsMessageComponent, CardTableComponent, CardTableFilterSectionComponent, CardTableLoadingIndicatorComponent, CardTablePreloadIndicatorComponent, CardTableTableSectionComponent, CardTablePageJumper } from './wrappers/card-list.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const matModules = [
@@ -27,28 +29,24 @@ const matModules = [
     MatButtonModule,
     MatMenuModule,
     MatCheckboxModule,
-]
+];
+
 const components = [
     CardTableComponent,
     CardTableTableSectionComponent,
     CardTableFilterSectionComponent,
-    CardTablePaginationSectionComponent,
     CardTableLoadingIndicatorComponent,
     CardTablePreloadIndicatorComponent,
     CardListNoItemsMessageComponent,
-    CardListFabActionSectionComponent,
-    CardListErrorMessageComponent
+    CardListFabActionSectionDirective,
+    CardListErrorMessageComponent,
+    CardTablePageJumper,
 ];
 
-const directives = [
-    TableListSelectionContainerComponent,
-    TableRowCheckbox,
-    TableRowMasterCheckbox
-]
 
 @NgModule({
-    imports: [CommonModule, FlexLayoutModule, ...matModules],
-    declarations: [...components, ...directives],
-    exports: [...components, ...directives]
+    imports: [CommonModule, FlexLayoutModule, ReactiveFormsModule, ...matModules],
+    declarations: [...components],
+    exports: [...components]
 })
 export class UtilitiesModule { }

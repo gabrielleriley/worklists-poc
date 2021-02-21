@@ -3,7 +3,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MAT_PAGINATOR_DEFAULT_OPTIONS } from '@angular/material/paginator';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -44,6 +44,9 @@ const demos = [
         FlexLayoutModule,
         UtilitiesModule,
         ...demos
+    ],
+    providers: [
+        { provide: MAT_PAGINATOR_DEFAULT_OPTIONS, useValue: { pageSize: 12 }}
     ],
     bootstrap: [AppComponent],
 })
