@@ -1,7 +1,7 @@
-import { Component, AfterViewInit, ViewChild } from "@angular/core";
-import { MatTableDataSource } from '@angular/material/table';
+import { AfterViewInit, Component, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 enum State {
     Preloading = 'Preloading',
@@ -49,6 +49,7 @@ function createNewUser(id: number): UserData {
 @Component({
     selector: 'app-card-list-interaction-composed-demo',
     templateUrl: './card-list-interaction-demo-composed.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardListInteractionDemoComponent implements AfterViewInit {
     displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
@@ -59,7 +60,7 @@ export class CardListInteractionDemoComponent implements AfterViewInit {
     public readonly entityStates = [EntityState.HasPages, EntityState.Empty, EntityState.LoadError];
     public currentState = State.Loading;
     public entityState = EntityState.HasPages;
-
+    public pageIndex = 0;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
@@ -86,6 +87,11 @@ export class CardListInteractionDemoComponent implements AfterViewInit {
     public get hasError() {
         return this.entityState === EntityState.LoadError;
     }
+
+    public setPage(index) {
+        this.dataSource.paginator.pageIndex = index;
+    }
+
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
