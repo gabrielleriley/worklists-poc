@@ -1,4 +1,4 @@
-export enum EntityActionType {
+export enum ResourceMethod {
     Read,
     Create,
     Update,
@@ -8,18 +8,18 @@ export enum EntityActionType {
 }
 
 /**
- * Object to track the progress of an action workflow chain for the IEntityStatusState interface 
+ * Object to track the progress of an action workflow chain for the IEntityStatusState interface
  */
 export interface IEntityActionTimestamp {
     /**
-     * Name of the asynchronous action workflow
-     */
-    actionName: string;
-    /**
      * Asynchronous REST method type associated to action workflow chain
      */
-    actionType: EntityActionType;
+    resourceMethodType: ResourceMethod;
     timestamp: Date;
+    /**
+     * Name of the asynchronous action workflow
+     */
+    workflowName?: string;
     /**
      * Entity ID directly involved in action workflow chain (example: deletion by Id)
      */
@@ -28,7 +28,7 @@ export interface IEntityActionTimestamp {
 }
 
 /**
- * Additional interface for NgRx Entity store to track the state of asynchronous action workflow chains through start to completion/failure
+ * Additional interface for NgRx store to track the state of asynchronous action workflow chains through start to completion/failure
  */
 export interface IEntityStatusState {
     completedActions: IEntityActionTimestamp[];

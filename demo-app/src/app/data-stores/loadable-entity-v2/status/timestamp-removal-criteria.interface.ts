@@ -1,13 +1,13 @@
-import { EntityActionType } from './entity-action-timestamp.interface';
+import { ResourceMethod } from './entity-action-timestamp.interface';
 
 export interface IEntityTimestampRemoval {
-    actionName: string;
-    actionType: EntityActionType;
+    workflowName: string;
+    resourceMethodType: ResourceMethod;
     entityId?: number | string;
 }
 
 export interface IEntityTimestampRemovalCriteria {
-    actionNames: string[];
-    actionTypes: EntityActionType[];
+    workflowNames: string[];
+    resourceMethodTypes: ResourceMethod[];
     entityIds: (string | number)[];
 }

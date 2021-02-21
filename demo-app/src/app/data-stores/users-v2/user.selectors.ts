@@ -7,17 +7,17 @@ import { selectUsers } from './user.reducer';
 export const selectUsersState = createFeatureSelector<IUserEntityState>(userStateName);
 export const isWorkflowInProgress = (actionName: string) => createSelector(
     selectUsersState,
-    (state) => EntityStatus.isActionNameInProgress(state, actionName)
+    (state) => EntityStatus.isActionWorkflowInProgress(state, actionName)
 );
 
 export const isWorkflowCompleted = (actionName: string) => createSelector(
     selectUsersState,
-    (state) => EntityStatus.hasActionNameCompleted(state, actionName)
+    (state) => EntityStatus.hasActionWorkflowCompleted(state, actionName)
 );
 
 export const isWorkflowFailed = (actionName: string) => createSelector(
     selectUsersState,
-    (state) => EntityStatus.hasActionNameFailed(state, actionName)
+    (state) => EntityStatus.hasActionWorkflowFailed(state, actionName)
 );
 
 export const isWorkflowPreloading = (actionName: string) => createSelector(
@@ -28,7 +28,7 @@ export const isWorkflowPreloading = (actionName: string) => createSelector(
 
 export const isEmpty = createSelector(
     selectUsersState,
-    (state) => state.totalNumberEntities === 0
+    (state) => state.totalCount === 0
 );
 
 export const usersSelector = createSelector(

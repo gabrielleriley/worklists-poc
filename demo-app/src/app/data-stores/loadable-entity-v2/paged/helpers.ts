@@ -9,6 +9,6 @@ export function updatePaginationState<State extends IEntityPagedState>(
     return {
         ...state,
         pageInfo: { ...state.pageInfo, ...pageInfo },
-        totalNumberEntities: totalCount
+        totalCount
     };
 }

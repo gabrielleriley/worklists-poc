@@ -4,6 +4,11 @@ export interface ILoadablePageInfo {
 }
 
 export interface IEntityPagedState {
-    totalNumberEntities: number;
+    totalCount: number;
     pageInfo: ILoadablePageInfo;
+}
+
+export interface IPagedEntityPayload<T> {
+    totalCount: number;
+    entities: T[];
 }
