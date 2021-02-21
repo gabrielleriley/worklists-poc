@@ -8,7 +8,7 @@ import { MatSelectionListChange } from '@angular/material/list';
 })
 export class AppComponent {
     public options = ['Table States', 'Basic Table - Loadable Entity'];
-    public option = this.options[1];
+    public option = this.options[0];
     public setExample(ev: MatSelectionListChange) {
         this.option = ev.option.value;
     }
