@@ -3,6 +3,7 @@ export interface ILoadablePageInfo {
     pageSize: number;
 }
 
-export interface IEntityPaged {
+export interface IEntityPagedState {
+    totalNumberEntities: number;
     pageInfo: ILoadablePageInfo;
 }

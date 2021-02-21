@@ -7,9 +7,10 @@ import { IEntityTimestampRemovalCriteria, IEntityTimestampRemoval } from './time
  * @param timestamp - New timestamp to be upserted
  */
 export function upsertActionTimestamp(timestamps: IEntityActionTimestamp[], timestamp: IEntityActionTimestamp): IEntityActionTimestamp[] {
-    const nonMatchingTimestamps = timestamps.filter(ts => ts.actionName !== timestamp.actionName
-        && ts.actionType !== timestamp.actionType
-        && ts.entityId !== timestamp.entityId
+    const nonMatchingTimestamps = timestamps.filter((ts: IEntityActionTimestamp) => 
+        ts.actionName !== timestamp.actionName
+        || ts.actionType !== timestamp.actionType
+        || ts.entityId !== timestamp.entityId
     );
     return [...nonMatchingTimestamps, timestamp];
 }
@@ -23,7 +24,7 @@ export function removeActionTimestamp(
     timestamps: IEntityActionTimestamp[],
     removalCriteria: IEntityTimestampRemoval
 ): IEntityActionTimestamp[] {
-    return timestamps.filter((ts) => ts.actionName !== removalCriteria.actionName
+    return timestamps.filter((ts: IEntityActionTimestamp) => ts.actionName !== removalCriteria.actionName
         && ts.actionType !== removalCriteria.actionType
         && ts.entityId !== removalCriteria.entityId
     );
@@ -38,15 +39,16 @@ export function removeActionTimestampByCriteria(
     timestamps: IEntityActionTimestamp[],
     removalCriteria: Partial<IEntityTimestampRemovalCriteria>
 ): IEntityActionTimestamp[] {
-    return timestamps.filter(ts => !removalCriteria?.actionNames?.length || removalCriteria.actionNames.includes(ts.actionName))
+    return timestamps.filter((ts: IEntityActionTimestamp) =>
+        !removalCriteria?.actionNames?.length || removalCriteria.actionNames.includes(ts.actionName))
         .filter(ts => !removalCriteria?.actionTypes?.length || removalCriteria.actionTypes.includes(ts.actionType))
         .filter(ts => !removalCriteria?.entityIds?.length || removalCriteria.entityIds.includes(ts.entityId));
 }
 
-export function updateStatusesOnActionTrigger(
+export function updateStatusesOnActionTrigger<State extends IEntityStatusState>(
     { state, actionName, actionType, entityId }:
-        { state: IEntityStatusState; actionName: string; actionType: EntityActionType; entityId?: string | number; }
-): IEntityStatusState {
+        { state: State; actionName: string; actionType: EntityActionType; entityId?: string | number; }
+): State {
     return {
         ...state,
         inProgressActions: upsertActionTimestamp(state.inProgressActions, {
@@ -58,10 +60,10 @@ export function updateStatusesOnActionTrigger(
     };
 }
 
-export function updateStatusesOnActionSuccess(
+export function updateStatusesOnActionSuccess<State extends IEntityStatusState>(
     { state, actionName, actionType, entityId }:
-        { state: IEntityStatusState; actionName: string; actionType: EntityActionType; entityId?: string | number; }
-): IEntityStatusState {
+        { state: State; actionName: string; actionType: EntityActionType; entityId?: string | number; }
+): State {
     return {
         ...state,
         inProgressActions: removeActionTimestamp(state.inProgressActions, {
@@ -79,14 +81,14 @@ export function updateStatusesOnActionSuccess(
             actionType,
             entityId,
             timestamp: new Date()
-        })
+        }),
     };
 }
 
-export function updateStatusOnActionFailure(
+export function updateStatusOnActionFailure<State extends IEntityStatusState>(
     { state, actionName, actionType, entityId, errorMessage }:
-        { state: IEntityStatusState; actionName: string; actionType: EntityActionType; entityId?: string | number; errorMessage?: string }
-): IEntityStatusState {
+        { state: State; actionName: string; actionType: EntityActionType; entityId?: string | number; errorMessage?: string }
+): State {
     return {
         ...state,
         inProgressActions: removeActionTimestamp(state.inProgressActions, {

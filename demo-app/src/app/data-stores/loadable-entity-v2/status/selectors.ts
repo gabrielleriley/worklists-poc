@@ -1,4 +1,3 @@
-import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { IEntityStatusState, EntityActionType } from './entity-action-timestamp.interface';
 
 const completedActions = (state: IEntityStatusState) => state.completedActions;

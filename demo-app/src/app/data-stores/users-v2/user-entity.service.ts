@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IUserDTO, IUserRequestDTO, UserSortColumnDTO } from '@app/api-models';
-import { UserHttpService } from '@app/api-services/user-http.service';
 import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { ILoadablePageInfo } from '../loadable-entity-v2/paged';
 import { IUserEntity, IUserQueryCriteria } from './user.entity';
+import { UserHttpService } from '@app/api-services';
+import { IUserDTO, IUserRequestDTO, UserSortColumnDTO } from '@app/api-models';
 
 @Injectable({ providedIn: 'root' })
 export class UserEntityService {

@@ -1,7 +1,7 @@
 export enum UserSortColumnDTO {
     Email = 'email',
     FirstName = 'firstName',
-    LastName = 'lastName',    
+    LastName = 'lastName',
 }
 
 export interface IUserRequestDTO {
@@ -9,7 +9,7 @@ export interface IUserRequestDTO {
     genders: string[];
     lastName: string;
     sortColumn: UserSortColumnDTO;
-    order: 'asc' | 'desc' | ''
+    order: 'asc' | 'desc' | '';
 }
 
 export interface IUserDTO {
@@ -24,7 +24,7 @@ export interface IUserDTO {
     dob: {
         date: Date;
         age: number;
-    },
+    };
     phone: string;
     cell: string;
     nationality: string;

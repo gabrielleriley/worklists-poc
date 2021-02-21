@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPayload, IUserDTO, IUserRequestDTO } from '@app/api-models';
 import { map } from 'rxjs/operators';
+import { IUserRequestDTO, IPayload, IUserDTO } from '@app/api-models';
 
 @Injectable({ providedIn: 'root' })
 export class UserHttpService {
