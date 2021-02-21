@@ -1,0 +1,4 @@
+<%= createEntityServiceImports(schemaOptions) %>
+
+<%= createEntityService(schemaOptions) %>
+

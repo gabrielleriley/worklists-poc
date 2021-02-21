@@ -1,0 +1,26 @@
+{
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What directory should the entity store be created in?"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the entity name?"
+        },
+        "paginated": {
+            "type": "boolean",
+            "x-prompt": "Does the resource API support pagination?"
+        },
+        "queryParams": {
+            "type": "boolean",
+            "x-prompt": "Does the resource API support query parameters (sorting, filtering, etc)?"
+        },
+        "multiArea": {
+            "type": "boolean",
+            "x-prompt": "Will this store be used in multiple feature areas?"
+        }
+    }
+}

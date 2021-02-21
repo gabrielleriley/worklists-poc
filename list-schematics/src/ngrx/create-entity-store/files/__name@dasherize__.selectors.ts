@@ -1,0 +1,3 @@
+<%= createSelectorsImports(schemaOptions) %>
+
+<%= createStateSelector(name) %>

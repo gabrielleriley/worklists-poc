@@ -1,0 +1,9 @@
+{
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What directory is the entity store located in?"
+        }
+    }
+}

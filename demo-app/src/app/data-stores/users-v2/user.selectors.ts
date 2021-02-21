@@ -1,4 +1,4 @@
-import { createFeatureSelector, select, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { userStateName, IUserEntityState } from './user.state';
 import * as EntityStatus from '@app/data-stores/loadable-entity-v2/status';
 import * as EntityPage from '@app/data-stores/loadable-entity-v2/paged';

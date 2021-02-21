@@ -1,0 +1,3 @@
+<%= createModuleFileImports(schemaOptions) %>
+
+<%= createModule(schemaOptions) %>
