@@ -1,4 +1,4 @@
-export enum ResourceMethod {
+export enum EntityResourceMethod {
     Read,
     Create,
     Update,
@@ -7,14 +7,21 @@ export enum ResourceMethod {
     Action,
 }
 
+export interface IEntityTimestampDefinition {
+    resourceMethodType: EntityResourceMethod;
+    workflowName?: string;
+    entityId?: number | string;
+    message?: string;
+}
+
 /**
  * Object to track the progress of an action workflow chain for the IEntityStatusState interface
  */
-export interface IEntityActionTimestamp {
+export interface IEntityActionTimestamp extends IEntityTimestampDefinition {
     /**
      * Asynchronous REST method type associated to action workflow chain
      */
-    resourceMethodType: ResourceMethod;
+    resourceMethodType: EntityResourceMethod;
     timestamp: Date;
     /**
      * Name of the asynchronous action workflow

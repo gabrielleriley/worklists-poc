@@ -20,7 +20,7 @@ function getStateSelectorName(name: string) {
 }
 
 export function createStateSelector(name: string) {
-    return `export const ${getStateSelectorName(name)} = createFeatureSelector<${ Helpers.getStateName(name)}>(${ Helpers.getStateNameVariable(name) })`;
+    return `export const ${getStateSelectorName(name)} = createFeatureSelector<${ Helpers.getStateName(name)}>(${ Helpers.getStateNameVariable(name) });`;
 }
 
 function createStatusSelector(name: string, verb: string, statusSelectorName: string) {
@@ -34,7 +34,7 @@ export const is${strings.capitalize(name)}${strings.capitalize(verb)} = createSe
 function createPageSelector(name: string, suffix: string, pageSelectorName: string) {
     return `
 export const ${strings.camelize(name)}${strings.capitalize(suffix)} = createSelector(
-    ${createStateSelector(name)},
+    ${getStateSelectorName(name)},
     EntityPage.${pageSelectorName}
 );`
 }
@@ -42,7 +42,7 @@ export const ${strings.camelize(name)}${strings.capitalize(suffix)} = createSele
 export function createEntitySelector(name: string) {
     return `
 export const ${strings.camelize(name)}EntitiesSelector = createSelector(
-    ${createStateSelector(name)},
+    ${getStateSelectorName(name)},
     selectAll${strings.classify(name)}
 );`
 }

@@ -3,32 +3,22 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, shareReplay, first, startWith } from 'rxjs/operators';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
+/**
+ * Maintains table selections across multiple pages
+ */
 export class PersistedTableSelections {
     private currentPageIds = new BehaviorSubject([]);
     public formGroup = new FormGroup({});
 
-    public selectedStringIds$: Observable<string[]> = this.formGroup.valueChanges.pipe(
-        startWith(this.formGroup.value),
-        map((fgValue) => Object.getOwnPropertyNames(fgValue).filter((key) => fgValue[key]))
-    );
-    public addControlsForIds(ids: (string | number)[]) {
-        ids.filter((id) => !this.formGroup.contains(id.toString()))
-            .forEach((id) => this.formGroup.addControl(id.toString(), new FormControl(false)));
-        this.currentPageIds.next(ids);
-    }
-    public removeControlsForIds(ids: (string | number)[]) {
-        ids.filter((id) => this.formGroup.removeControl(id.toString()));
-    }
-
-    private currentPageSelections = combineLatest(
+    private currentPageSelections = combineLatest([
         this.currentPageIds,
         this.formGroup.valueChanges
-    ).pipe(
+    ]).pipe(
         map(([ids, group]) => {
             return ids.map((id) => group[id]);
         }),
         shareReplay(),
-    )
+    );
 
     public indeterminate: Observable<boolean> = this.currentPageSelections.pipe(
         map((currentPageSelections) => {
@@ -47,7 +37,20 @@ export class PersistedTableSelections {
 
     public allChecked: Observable<boolean> = this.currentPageSelections.pipe(
         map((currentPageSelections) => currentPageSelections.every((s) => s))
-    )
+    );
+
+    public selectedStringIds$: Observable<string[]> = this.formGroup.valueChanges.pipe(
+        startWith(this.formGroup.value),
+        map((fgValue) => Object.getOwnPropertyNames(fgValue).filter((key) => fgValue[key]))
+    );
+    public addControlsForIds(ids: (string | number)[]) {
+        ids.filter((id) => !this.formGroup.contains(id.toString()))
+            .forEach((id) => this.formGroup.addControl(id.toString(), new FormControl(false)));
+        this.currentPageIds.next(ids);
+    }
+    public removeControlsForIds(ids: (string | number)[]) {
+        ids.filter((id) => this.formGroup.removeControl(id.toString()));
+    }
 
     public getRowControl(id: string | number) {
         return this.formGroup.get(id.toString());

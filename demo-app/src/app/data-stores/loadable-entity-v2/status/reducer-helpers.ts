@@ -1,112 +1,127 @@
-import { IEntityActionTimestamp, ResourceMethod, IEntityStatusState } from './entity-action-timestamp.interface';
-import { IEntityTimestampRemovalCriteria, IEntityTimestampRemoval } from './timestamp-removal-criteria.interface';
+import { IEntityActionTimestamp, IEntityStatusState, IEntityTimestampDefinition } from './entity-action-timestamp.interface';
 
 /**
- * Upserts timestamp into array. Timestamp matches are based upon action name, action type, and id.
- * @param timestamps - Either inProgressActions, completedActions, or failureActions
+ * Adds timestamp into array.
+ * @param timestamps Array of in progress, completed, or failed action timestamps
  * @param timestamp - New timestamp to be upserted
  */
-export function upsertActionTimestamp(timestamps: IEntityActionTimestamp[], timestamp: IEntityActionTimestamp): IEntityActionTimestamp[] {
+export function addActionTimestamp(timestamps: IEntityActionTimestamp[], timestamp: IEntityTimestampDefinition): IEntityActionTimestamp[] {
+    return [...timestamps, { ...timestamp, timestamp: new Date() }];
+}
+/**
+ * Upserts timestamp into array. Timestamp matches are based upon action name, action type, and id.
+ * @param timestamps Array of in progress, completed, or failed action timestamps
+ * @param timestamp - New timestamp to be upserted
+ */
+export function upsertActionTimestamp(
+    timestamps: IEntityActionTimestamp[],
+    timestamp: IEntityTimestampDefinition
+): IEntityActionTimestamp[] {
     const nonMatchingTimestamps = timestamps.filter((ts: IEntityActionTimestamp) =>
         ts.workflowName !== timestamp.workflowName
         || ts.resourceMethodType !== timestamp.resourceMethodType
         || ts.entityId !== timestamp.entityId
     );
-    return [...nonMatchingTimestamps, timestamp];
+    return [...nonMatchingTimestamps, { ...timestamp, timestamp: new Date() }];
 }
 
 /**
- * Removed timestamp from array with matching criteria
+ * Removes single timestamp from array with matching resource method type, workflow name, entity id
  * @param timestamps Array of in progress, completed, or failed action timestamps
  * @param removalCriteria - Removal criteria
  */
 export function removeActionTimestamp(
     timestamps: IEntityActionTimestamp[],
-    removalCriteria: IEntityTimestampRemoval
+    removalCriteria: IEntityTimestampDefinition
 ): IEntityActionTimestamp[] {
-    return timestamps.filter((ts: IEntityActionTimestamp) => ts.workflowName !== removalCriteria.workflowName
-        && ts.resourceMethodType !== removalCriteria.resourceMethodType
-        && ts.entityId !== removalCriteria.entityId
+    const matchingIndex = timestamps.findIndex((ts: IEntityActionTimestamp) => ts.workflowName === removalCriteria.workflowName
+        && ts.resourceMethodType === removalCriteria.resourceMethodType
+        && ts.entityId === removalCriteria.entityId
     );
+    return timestamps.filter((_ts, index: number) => index !== matchingIndex);
 }
 
 /**
- * Removes timestamps from array that match removal criteria
- * @param timestamps - Array of in progress, completed, or failed action timestamps
- * @param removalCriteria - Criteria of items to be removed. Only include properties that the array should be filtered based upon.
+ * Upserts action status to inProgressActions array.
+ * Use this function when the associated effect uses a switchMap.
  */
-export function removeActionTimestampByCriteria(
-    timestamps: IEntityActionTimestamp[],
-    removalCriteria: Partial<IEntityTimestampRemovalCriteria>
-): IEntityActionTimestamp[] {
-    return timestamps.filter((ts: IEntityActionTimestamp) =>
-        !removalCriteria?.workflowNames?.length || removalCriteria.workflowNames.includes(ts.workflowName))
-        .filter(ts => !removalCriteria?.resourceMethodTypes?.length || removalCriteria.resourceMethodTypes.includes(ts.resourceMethodType))
-        .filter(ts => !removalCriteria?.entityIds?.length || removalCriteria.entityIds.includes(ts.entityId));
-}
-
-export function updateStatusesOnActionTrigger<State extends IEntityStatusState>(
-    { state, actionName, actionType, entityId }:
-        { state: State; actionName: string; actionType: ResourceMethod; entityId?: string | number; }
+export function updateStatusesOnCancelableActionTrigger<State extends IEntityStatusState>(
+    definition: IEntityTimestampDefinition,
+    state: State
 ): State {
     return {
         ...state,
         inProgressActions: upsertActionTimestamp(state.inProgressActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId,
-            timestamp: new Date()
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
+        }),
+    };
+}
+
+/**
+ * Adds action status to inProgressActions array.
+ * Use this function when the associated effect does not use a switchMap.
+ */
+export function updateStatusesOnActionTrigger<State extends IEntityStatusState>(
+    definition: IEntityTimestampDefinition,
+    state: State
+): State {
+    return {
+        ...state,
+        inProgressActions: addActionTimestamp(state.inProgressActions, {
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
         }),
     };
 }
 
 export function updateStatusesOnActionSuccess<State extends IEntityStatusState>(
-    { state, actionName, actionType, entityId }:
-        { state: State; actionName: string; actionType: ResourceMethod; entityId?: string | number; }
+    definition: IEntityTimestampDefinition,
+    state: State
 ): State {
     return {
         ...state,
         inProgressActions: removeActionTimestamp(state.inProgressActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
         }),
         failedActions: removeActionTimestamp(state.failedActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
         }),
         completedActions: upsertActionTimestamp(state.completedActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId,
-            timestamp: new Date()
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
         }),
     };
 }
 
 export function updateStatusOnActionFailure<State extends IEntityStatusState>(
-    { state, actionName, actionType, entityId, errorMessage }:
-        { state: State; actionName: string; actionType: ResourceMethod; entityId?: string | number; errorMessage?: string }
+    definition: IEntityTimestampDefinition,
+    state: State
 ): State {
     return {
         ...state,
         inProgressActions: removeActionTimestamp(state.inProgressActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
         }),
         completedActions: removeActionTimestamp(state.completedActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId
         }),
         failedActions: upsertActionTimestamp(state.failedActions, {
-            workflowName: actionName,
-            resourceMethodType: actionType,
-            entityId,
-            timestamp: new Date(),
-            message: errorMessage
+            workflowName: definition.workflowName,
+            resourceMethodType: definition.resourceMethodType,
+            entityId: definition.entityId,
+            message: definition.message
         })
     };
 }

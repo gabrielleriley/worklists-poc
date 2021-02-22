@@ -23,11 +23,11 @@ export const userReducer = createReducer(
             ...state,
             criteria: { ...state.criteria, ...action.criteria }
         };
-        const statusState = EntityStatus.updateStatusesOnActionTrigger({
-            state: updatedCriteriaState,
-            actionType: EntityStatus.ResourceMethod.Read,
-            actionName: UsersActions.UserActionsActionWorkflowNames.GetFromLeft,
-        });
+        const statusState = EntityStatus.updateStatusesOnActionTrigger(
+            {
+                resourceMethodType: EntityStatus.EntityResourceMethod.Read,
+                workflowName: UsersActions.UserActionsActionWorkflowNames.GetFromLeft,
+            }, updatedCriteriaState);
         const pagedState = EntityPage.updatePaginationState(statusState, action.pageInfo, state.totalCount);
         return pagedState;
     }),
@@ -37,10 +37,9 @@ export const userReducer = createReducer(
             criteria: { ...state.criteria, ...action.criteria }
         };
         const statusState = EntityStatus.updateStatusesOnActionTrigger({
-            state: updatedCriteriaState,
-            actionType: EntityStatus.ResourceMethod.Read,
-            actionName: UsersActions.UserActionsActionWorkflowNames.GetFromRight,
-        });
+            resourceMethodType: EntityStatus.EntityResourceMethod.Read,
+            workflowName: UsersActions.UserActionsActionWorkflowNames.GetFromRight,
+        }, updatedCriteriaState);
         const pagedState = EntityPage.updatePaginationState(statusState, action.pageInfo, state.totalCount);
         return pagedState;
     }),
@@ -48,37 +47,31 @@ export const userReducer = createReducer(
         let newState = adapter.setAll(action.entities, state);
         newState = EntityPage.updatePaginationState(newState, newState.pageInfo, action.totalCount);
         newState = EntityStatus.updateStatusesOnActionSuccess({
-            state: newState,
-            actionType: EntityStatus.ResourceMethod.Read,
-            actionName: UsersActions.UserActionsActionWorkflowNames.GetFromLeft,
-        });
+            resourceMethodType: EntityStatus.EntityResourceMethod.Read,
+            workflowName: UsersActions.UserActionsActionWorkflowNames.GetFromLeft,
+        }, newState);
         return newState;
     }),
     on(UsersActions.getUsersSuccessFromRight, (state, action) => {
         let newState = adapter.setAll(action.entities, state);
         newState = EntityPage.updatePaginationState(newState, newState.pageInfo, action.totalCount);
-        console.log('STATE 1', newState);
         newState = EntityStatus.updateStatusesOnActionSuccess({
-            state: newState,
-            actionType: EntityStatus.ResourceMethod.Read,
-            actionName: UsersActions.UserActionsActionWorkflowNames.GetFromRight,
-        });
-        console.log('STATE 2', newState);
+            resourceMethodType: EntityStatus.EntityResourceMethod.Read,
+            workflowName: UsersActions.UserActionsActionWorkflowNames.GetFromRight,
+        }, newState);
         return newState;
     }),
     on(UsersActions.getUsersFailureFromLeft, (state) => {
         return EntityStatus.updateStatusOnActionFailure({
-            state,
-            actionType: EntityStatus.ResourceMethod.Read,
-            actionName: UsersActions.UserActionsActionWorkflowNames.GetFromLeft,
-        });
+            resourceMethodType: EntityStatus.EntityResourceMethod.Read,
+            workflowName: UsersActions.UserActionsActionWorkflowNames.GetFromLeft,
+        }, state);
     }),
     on(UsersActions.getUsersFailureFromRight, (state) => {
         return EntityStatus.updateStatusOnActionFailure({
-            state,
-            actionType: EntityStatus.ResourceMethod.Read,
-            actionName: UsersActions.UserActionsActionWorkflowNames.GetFromRight,
-        });
+            resourceMethodType: EntityStatus.EntityResourceMethod.Read,
+            workflowName: UsersActions.UserActionsActionWorkflowNames.GetFromRight,
+        }, state);
     }),
 );
 
