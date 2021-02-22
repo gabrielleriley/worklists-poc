@@ -23,3 +23,44 @@ export function createStateSelector(name: string) {
     return `export const ${getStateSelectorName(name)} = createFeatureSelector<${ Helpers.getStateName(name)}>(${ Helpers.getStateNameVariable(name) })`;
 }
 
+function createStatusSelector(name: string, verb: string, statusSelectorName: string) {
+    return `
+export const is${strings.capitalize(name)}${strings.capitalize(verb)} = createSelector(
+    ${getStateSelectorName(name)},
+    EntityStatus.${statusSelectorName}
+);`
+}
+
+function createPageSelector(name: string, suffix: string, pageSelectorName: string) {
+    return `
+export const ${strings.camelize(name)}${strings.capitalize(suffix)} = createSelector(
+    ${createStateSelector(name)},
+    EntityPage.${pageSelectorName}
+);`
+}
+
+export function createEntitySelector(name: string) {
+    return `
+export const ${strings.camelize(name)}EntitiesSelector = createSelector(
+    ${createStateSelector(name)},
+    selectAll${strings.classify(name)}
+);`
+}
+
+export function createStatusSelectors(name: string) {
+    const statusSelectors = [
+        createStatusSelector(name, 'Loading', 'isLoading'),
+        createStatusSelector(name, 'Loaded', 'hasLoadCompleted'),
+        createStatusSelector(name, 'Failed', 'hasLoadFailed')
+    ];
+    return statusSelectors.join('\n');
+}
+
+export function createPageSelectors(name: string) {
+    const selectors = [
+        createPageSelector(name, 'PageIndex', 'currentPageIndex'),
+        createPageSelector(name, 'PageSize', 'currentPageSize'),
+        createPageSelector(name, 'TotalCount', 'totalCount'),
+    ];
+    return selectors.join('\n');
+}
