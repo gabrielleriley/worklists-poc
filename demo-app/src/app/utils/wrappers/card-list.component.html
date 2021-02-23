@@ -19,7 +19,7 @@
             <ng-content *ngIf="ignoreInterface || hasError" select="app-card-list-error-message"></ng-content>
         </span>
 
-        <div fxLayout="row" class="mat-paginator mat-paginator-container">
+        <div *ngIf="showPaginationSection" fxLayout="row" class="mat-paginator mat-paginator-container">
             <ng-content select="app-page-jumper"></ng-content>
             <ng-content select="mat-paginator"></ng-content>
         </div>

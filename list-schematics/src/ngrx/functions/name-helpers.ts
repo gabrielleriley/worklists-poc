@@ -18,6 +18,11 @@ export function getStateName(name: string) {
     return `${strings.classify(name)}EntityState`;
 }
 
+// Actions
+export function createActionName(entityName: string, prefix?: string, suffix?: string) {
+    return strings.camelize(`${prefix} ${entityName} ${suffix}`);
+}
+
 // Reducer
 export function getReducerName(name: string) {
     return `${strings.camelize(name)}Reducer`;

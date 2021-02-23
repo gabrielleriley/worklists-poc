@@ -20,8 +20,9 @@ export function createModule(options: ICreateEntityStoreSchema) {
     ];
     return `
 @NgModule({
-\timports: [\n\t\t${importsArray.join(',\n\t\t')}\n\t]
+${Helpers.TAB}imports: [\n${Helpers.TAB}${Helpers.TAB}${importsArray.join(`,\n${Helpers.TAB}${Helpers.TAB}`)}\n${Helpers.TAB}]
 })
-export class ${Helpers.getEntityModuleName(options.name)} { }`
+export class ${Helpers.getEntityModuleName(options.name)} { }
+`
 }
 

@@ -12,7 +12,7 @@ const inProgressActionsByActionName = (state: IEntityStatusState, workflowName: 
 const isResourceMethodTypeInProgress = (state: IEntityStatusState, resourceMethodType: EntityResourceMethod) =>
     inProgressActionsByActionType(state, resourceMethodType).length > 0;
 
-export const isLoading = (state: IEntityStatusState) => isResourceMethodTypeInProgress(state, EntityResourceMethod.Read);
+export const isReading = (state: IEntityStatusState) => isResourceMethodTypeInProgress(state, EntityResourceMethod.Read);
 export const isCreating = (state: IEntityStatusState) => isResourceMethodTypeInProgress(state, EntityResourceMethod.Create);
 export const isUpdating = (state: IEntityStatusState) => isResourceMethodTypeInProgress(state, EntityResourceMethod.Update);
 export const isPatching = (state: IEntityStatusState) => isResourceMethodTypeInProgress(state, EntityResourceMethod.Patch);
@@ -28,7 +28,7 @@ const completedActionsByActionName = (state: IEntityStatusState, workflowName: s
 const isActionTypeCompleted = (state: IEntityStatusState, resourceMethodType: EntityResourceMethod) =>
     completedActionsByActionType(state, resourceMethodType).length > 0;
 
-export const hasLoadCompleted = (state: IEntityStatusState) => isActionTypeCompleted(state, EntityResourceMethod.Read);
+export const hasReadCompleted = (state: IEntityStatusState) => isActionTypeCompleted(state, EntityResourceMethod.Read);
 export const hasCreationCompleted = (state: IEntityStatusState) => isActionTypeCompleted(state, EntityResourceMethod.Create);
 export const hasUpdateCompleted = (state: IEntityStatusState) => isActionTypeCompleted(state, EntityResourceMethod.Update);
 export const hasPatchCompleted = (state: IEntityStatusState) => isActionTypeCompleted(state, EntityResourceMethod.Patch);
@@ -44,7 +44,7 @@ const failedActionsByActionName = (state: IEntityStatusState, workflowName: stri
 const hasResourceMethodTypeFailed = (state: IEntityStatusState, resourceMethodType: EntityResourceMethod) =>
     failedActionsByActionType(state, resourceMethodType).length > 0;
 
-export const hasLoadFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Read);
+export const hasReadFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Read);
 export const hasCreationFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Create);
 export const hasUpdateFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Update);
 export const hasPatchFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Patch);

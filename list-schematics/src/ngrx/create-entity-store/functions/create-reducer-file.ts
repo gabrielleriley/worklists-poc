@@ -25,12 +25,15 @@ export function createInitialState(options: ICreateEntityStoreSchema) {
     if (options.queryParams) {
         initialProperties = [...initialProperties, 'criteria: undefined'];
     }
-    const initialStateProperties = initialProperties.reduce((acc, prop) => acc + `\t${prop},\n`, '\n');
+    const initialStateProperties = initialProperties.reduce((acc, prop) => acc + `${Helpers.TAB}${prop},\n`, '\n');
     return `const initialState: ${Helpers.getStateName(options.name)} = adapter.getInitialState({${initialStateProperties}});`;
 }
 
 export function createReducer(options: ICreateEntityStoreSchema) {
-    return `export const ${Helpers.getReducerName(options.name)} = createReducer(\n\tinitialState\n);`;
+    return `export const ${Helpers.getReducerName(options.name)} = createReducer(
+${Helpers.TAB}initialState,
+${Helpers.TAB}on(${strings.classify(options.name)}Actions.${Helpers.createActionName(options.name, 'clear', 'Store')}, () => ({ ...initialState }))
+);`;
 }
 
 export function createAdapterSelectors(options: ICreateEntityStoreSchema) {

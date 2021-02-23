@@ -45,17 +45,13 @@ export function removeActionTimestamp(
  * Upserts action status to inProgressActions array.
  * Use this function when the associated effect uses a switchMap.
  */
-export function updateStatusesOnCancelableActionTrigger<State extends IEntityStatusState>(
+export function updateStatusStateOnCancelableTrigger<State extends IEntityStatusState>(
     definition: IEntityTimestampDefinition,
     state: State
 ): State {
     return {
         ...state,
-        inProgressActions: upsertActionTimestamp(state.inProgressActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
+        inProgressActions: upsertActionTimestamp(state.inProgressActions, definition),
     };
 }
 
@@ -63,65 +59,36 @@ export function updateStatusesOnCancelableActionTrigger<State extends IEntitySta
  * Adds action status to inProgressActions array.
  * Use this function when the associated effect does not use a switchMap.
  */
-export function updateStatusesOnActionTrigger<State extends IEntityStatusState>(
+export function updateStatusStateOnTrigger<State extends IEntityStatusState>(
     definition: IEntityTimestampDefinition,
     state: State
 ): State {
     return {
         ...state,
-        inProgressActions: addActionTimestamp(state.inProgressActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
+        inProgressActions: addActionTimestamp(state.inProgressActions, definition),
     };
 }
 
-export function updateStatusesOnActionSuccess<State extends IEntityStatusState>(
+export function updateStatusStateOnSuccess<State extends IEntityStatusState>(
     definition: IEntityTimestampDefinition,
     state: State
 ): State {
     return {
         ...state,
-        inProgressActions: removeActionTimestamp(state.inProgressActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
-        failedActions: removeActionTimestamp(state.failedActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
-        completedActions: upsertActionTimestamp(state.completedActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
+        inProgressActions: removeActionTimestamp(state.inProgressActions, definition),
+        failedActions: removeActionTimestamp(state.failedActions, definition),
+        completedActions: upsertActionTimestamp(state.completedActions, definition),
     };
 }
 
-export function updateStatusOnActionFailure<State extends IEntityStatusState>(
+export function updateStatusStateOnFailure<State extends IEntityStatusState>(
     definition: IEntityTimestampDefinition,
     state: State
 ): State {
     return {
         ...state,
-        inProgressActions: removeActionTimestamp(state.inProgressActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
-        completedActions: removeActionTimestamp(state.completedActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId
-        }),
-        failedActions: upsertActionTimestamp(state.failedActions, {
-            workflowName: definition.workflowName,
-            resourceMethodType: definition.resourceMethodType,
-            entityId: definition.entityId,
-            message: definition.message
-        })
+        inProgressActions: removeActionTimestamp(state.inProgressActions, definition),
+        completedActions: removeActionTimestamp(state.completedActions, definition),
+        failedActions: upsertActionTimestamp(state.failedActions, definition)
     };
 }

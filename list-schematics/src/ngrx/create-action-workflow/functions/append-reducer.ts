@@ -1,10 +1,8 @@
 import { SchematicsException, Tree } from "@angular-devkit/schematics";
 import * as ts from 'typescript';
 import * as Helpers from '../../functions';
+import { InsertChange } from "../interfaces";
 
-class InsertChange {
-    constructor(public filePath: string, public pos: number, public contents: string) { }
-}
 export function appendReducer(filePath: string, tree: Tree): InsertChange {
     let text = tree.read(filePath);
     if (!text) {
@@ -19,5 +17,5 @@ export function appendReducer(filePath: string, tree: Tree): InsertChange {
     }
     const relevantSiblings = reducerNode.parent.getChildren().filter(c => c.kind === ts.SyntaxKind.SyntaxList);
     let lastSibling = relevantSiblings[relevantSiblings.length - 1];
-    return new InsertChange(filePath, lastSibling?.getEnd() ?? 0, ',\n\theyo');
+    return { filePath, position: lastSibling?.getEnd() ?? 0 };
 }

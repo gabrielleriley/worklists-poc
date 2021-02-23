@@ -1,14 +1,22 @@
 import { IEntityPagedState } from './interfaces';
 import { ILoadablePageInfo } from '@app/data-stores/loadable-entity/entity-state.interface';
 
-export function updatePaginationState<State extends IEntityPagedState>(
-    state: State,
+export function updatePageInfoState<State extends IEntityPagedState>(
     pageInfo: Partial<ILoadablePageInfo>,
-    totalCount: number = 0
-): State {
+    state: State,
+) {
     return {
         ...state,
         pageInfo: { ...state.pageInfo, ...pageInfo },
+    };
+}
+
+export function updateTotalCount<State extends IEntityPagedState>(
+    totalCount: number,
+    state: State,
+) {
+    return {
+        ...state,
         totalCount
     };
 }

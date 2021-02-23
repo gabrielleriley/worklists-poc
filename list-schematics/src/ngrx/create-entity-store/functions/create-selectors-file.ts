@@ -49,9 +49,9 @@ export const ${strings.camelize(name)}EntitiesSelector = createSelector(
 
 export function createStatusSelectors(name: string) {
     const statusSelectors = [
-        createStatusSelector(name, 'Loading', 'isLoading'),
-        createStatusSelector(name, 'Loaded', 'hasLoadCompleted'),
-        createStatusSelector(name, 'Failed', 'hasLoadFailed')
+        createStatusSelector(name, 'Loading', 'isReading'),
+        createStatusSelector(name, 'Loaded', 'hasReadCompleted'),
+        createStatusSelector(name, 'Failed', 'hasReadFailed')
     ];
     return statusSelectors.join('\n');
 }

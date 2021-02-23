@@ -27,8 +27,8 @@ describe('Entity Status reducer helpers', () => {
     describe('updateStatusesOnCancelableActionTrigger', () => {
         it('should upsert timestamp to in progress array', () => {
             // Call method twice to ensure timestamps are upserted
-            const newState = Helpers.updateStatusesOnCancelableActionTrigger(timestampDefinition, baseState);
-            const newState2 = Helpers.updateStatusesOnCancelableActionTrigger(timestampDefinition, newState);
+            const newState = Helpers.updateStatusStateOnCancelableTrigger(timestampDefinition, baseState);
+            const newState2 = Helpers.updateStatusStateOnCancelableTrigger(timestampDefinition, newState);
 
             expect(newState.inProgressActions.length).toEqual(baseInProgressLength + 1);
             expect(newState2.inProgressActions.length).toEqual(baseInProgressLength + 1);
@@ -38,8 +38,8 @@ describe('Entity Status reducer helpers', () => {
     describe('updateStatusesOnActionTrigger', () => {
         it('should add timestamp to in progress array', () => {
             // Call method twice to ensure timestamps are added
-            const newState = Helpers.updateStatusesOnActionTrigger(timestampDefinition, baseState);
-            const newState2 = Helpers.updateStatusesOnActionTrigger(timestampDefinition, newState);
+            const newState = Helpers.updateStatusStateOnTrigger(timestampDefinition, baseState);
+            const newState2 = Helpers.updateStatusStateOnTrigger(timestampDefinition, newState);
 
             expect(newState.inProgressActions.length).toEqual(baseInProgressLength + 1);
             expect(newState2.inProgressActions.length).toEqual(baseInProgressLength + 2);
@@ -54,11 +54,11 @@ describe('Entity Status reducer helpers', () => {
                 inProgressActions: [updateTimestamp, ...baseState.inProgressActions],
                 failedActions: [updateTimestamp, ...baseState.failedActions]
             };
-            newState = Helpers.updateStatusesOnActionSuccess(timestampDefinition, stateWithPreviousFailure);
+            newState = Helpers.updateStatusStateOnSuccess(timestampDefinition, stateWithPreviousFailure);
         })
         it('should upsert timestamp to completed array', () => {
             // Call method a second time to ensure timestamps are upserted
-            const newState2 = Helpers.updateStatusesOnActionSuccess(timestampDefinition, newState);
+            const newState2 = Helpers.updateStatusStateOnSuccess(timestampDefinition, newState);
 
             expect(newState.completedActions.length).toEqual(baseCompletedLength + 1);
             expect(newState2.completedActions.length).toEqual(baseCompletedLength + 1);
@@ -81,11 +81,11 @@ describe('Entity Status reducer helpers', () => {
                 inProgressActions: [updateTimestamp, ...baseState.inProgressActions],
                 completedActions: [updateTimestamp, ...baseState.completedActions]
             };
-            newState = Helpers.updateStatusOnActionFailure(timestampDefinition, stateWithPreviousCompletion);
+            newState = Helpers.updateStatusStateOnFailure(timestampDefinition, stateWithPreviousCompletion);
         })
         it('should upsert timestamp to failure array', () => {
             // Call method a second time to ensure timestamps are upserted
-            const newState2 = Helpers.updateStatusOnActionFailure(timestampDefinition, newState);
+            const newState2 = Helpers.updateStatusStateOnFailure(timestampDefinition, newState);
             expect(newState.failedActions.length).toEqual(baseFailedLength + 1);
             expect(newState2.failedActions.length).toEqual(baseFailedLength + 1);
         });
