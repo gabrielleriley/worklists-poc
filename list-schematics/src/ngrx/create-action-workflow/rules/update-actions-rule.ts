@@ -10,7 +10,7 @@ export function appendToActionsRule(filePath: string, config: IActionWorkflowSch
 
         const declarationRecorder = tree.beginUpdate(filePath);
         if (change) {
-            declarationRecorder.insertLeft(change.position, newContents);
+            declarationRecorder.insertLeft(change.position, `${newContents}\n`);
         }
         tree.commitUpdate(declarationRecorder);
 

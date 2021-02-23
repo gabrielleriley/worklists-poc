@@ -23,7 +23,7 @@ function createTriggerReducer(config: IActionWorkflowSchema) {
         newState = EntityStatus.${isRead(config) ? 'updateStatusStateOnCancelableTrigger' : 'updateStatusStateOnTrigger'}({
             resourceMethodType: ${getResourceMethodType(config)}
         }, newState);`
-    const updatePageInfoStatus = needsPageInfo(config) ? `newState = EntityPage.updatePageInfoState(action.pageInfo, newState);` : undefined;
+    const updatePageInfoStatus = needsPageInfo(config) ? `newState = EntityPage.updatePageInfoState(_action.pageInfo, newState);` : undefined;
     const returnStatement = `return newState`;
     const contents = [newState, updateStatus, updatePageInfoStatus, returnStatement]
         .filter(c => c !== undefined)
