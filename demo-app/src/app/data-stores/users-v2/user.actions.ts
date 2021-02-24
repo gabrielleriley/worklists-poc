@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { IUserQueryCriteria, IUserEntity } from './user.entity';
-import { ILoadablePageInfo } from '../loadable-entity-v2/paged';
+import { IEntityPageInfo } from '../loadable-entity-v2/paged';
 
 export enum UserActionsActionWorkflowNames {
     GetFromLeft = '[Demo Left] Get Users',
@@ -9,7 +9,7 @@ export enum UserActionsActionWorkflowNames {
 
 export interface IUserLoadProps {
     criteria?: Partial<IUserQueryCriteria>;
-    pageInfo?: Partial<ILoadablePageInfo>;
+    pageInfo?: Partial<IEntityPageInfo>;
 }
 
 export const getUsersTriggerFromLeft = createAction(UserActionsActionWorkflowNames.GetFromLeft, props<IUserLoadProps>());
