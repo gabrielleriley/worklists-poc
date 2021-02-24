@@ -18,6 +18,24 @@ export function getStateName(name: string) {
     return `${strings.classify(name)}EntityState`;
 }
 
+// Selectors
+export function getCriteriaSelectorName(name: string) {
+    return `${strings.camelize(name)}CriteriaSelector`;
+}
+
+export function getCurrentPageIndexSelectorName(name: string) {
+    return `${strings.camelize(name)}${strings.capitalize('PageIndex')}Selector`;
+}
+
+export function getCurrentPageSizeSelectorName(name: string) {
+    return `${strings.camelize(name)}${strings.capitalize('PageSize')}Selector`;
+}
+
+export function getCurrentPageInfoSelectorName(name: string) {
+    return `${strings.camelize(name)}${strings.capitalize('PageInfo')}Selector`;
+}
+
+
 // Actions
 export function createActionName(entityName: string, prefix?: string, suffix?: string) {
     return strings.camelize(`${prefix} ${entityName} ${suffix}`);

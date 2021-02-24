@@ -1,25 +1,27 @@
 import { strings } from "@angular-devkit/core";
 import * as Helpers from '../../functions';
-import { ApiResponseType, IActionWorkflowSchema } from "../interfaces";
+import { ApiResponseType, IActionWorkflowSchema, ApiProperties } from "../interfaces";
 import { needsCriteria, needsPageInfo } from "./schema-helpers";
 
 function createActionType(options: IActionWorkflowSchema, suffix: string) {
     return `'[${strings.capitalize(options.name)} | ${strings.capitalize(options.featureArea)}] ${options.method} ${suffix}'`;
 }
 function getTriggerProps(options: IActionWorkflowSchema) {
-    switch(options.apiResponse) {
-        case ApiResponseType.EntityList:
+    switch(options.apiProperties) {
+        case ApiProperties.Paged:
+        case ApiProperties.PagedAndCriteria:
+        case ApiProperties.Criteria:
             let properties: string[] = [];
             if (needsPageInfo(options)) {
-                properties = [...properties, `pageInfo?: Partial<ILoadablePageInfo>`];
+                properties = [...properties, `pageInfo?: Partial<IEntityPageInfo>`];
             }
             if (needsCriteria(options)) {
                 properties = [...properties, `criteria?: ${Helpers.getEntityCriteriaInterfaceName(options.name)}`];
             }
             return `, props<{ ${properties.join(', ')} }>()`;
-        case ApiResponseType.Nothing:
+        case ApiProperties.None:
             return '';
-        case ApiResponseType.Other:
+        case ApiProperties.Other:
             return `, props<{}>()`
     }
 }

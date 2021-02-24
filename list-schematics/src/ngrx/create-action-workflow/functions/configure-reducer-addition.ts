@@ -13,51 +13,66 @@ function getResourceMethodType(config: IActionWorkflowSchema) {
 
 function createTriggerReducer(config: IActionWorkflowSchema) {
     const actionName = `${config.actionPrefix}Trigger`;
-    const newState = `
-        let newState: ${Helpers.getStateName(config.name)} = {
-            ...state, ${needsCriteria(config)
-            ? `\n${Helpers.TAB}${Helpers.TAB}criteria: { ...state.criteria, ..._action.criteria }`
-            : ''}
-        };`;
-    const updateStatus = `
-        newState = EntityStatus.${isRead(config) ? 'updateStatusStateOnCancelableTrigger' : 'updateStatusStateOnTrigger'}({
-            resourceMethodType: ${getResourceMethodType(config)}
-        }, newState);`
-    const updatePageInfoStatus = needsPageInfo(config) ? `newState = EntityPage.updatePageInfoState(_action.pageInfo, newState);` : undefined;
-    const returnStatement = `return newState`;
-    const contents = [newState, updateStatus, updatePageInfoStatus, returnStatement]
-        .filter(c => c !== undefined)
-        .join(`\n${Helpers.TAB}${Helpers.TAB}`);
-    return `on(${getActionsImportName(config.name)}.${actionName}, (state, _action) => {\n${contents}\n${Helpers.TAB}})`;
+    const updateCriteriaState = [
+        Helpers.line(`let newState: ${Helpers.getStateName(config.name)} = {`, 2),
+        Helpers.line(`...state,`, 3),
+        Helpers.line(`criteria: { ...state.criteria, ..._action.criteria }`, 3),
+        Helpers.line(`};`, 2)
+    ];
+    const noCriteriaUpdate = [
+        Helpers.line(`let newState: ${Helpers.getStateName(config.name)} = { ...state };`, 2)
+    ];
+    const entityStatusMethod = `EntityStatus.${isRead(config) ? 'updateStatusStateOnCancelableTrigger' : 'updateStatusStateOnTrigger'}`
+    const updateStatus = [
+        Helpers.line(`newState = ${entityStatusMethod}({`, 2),
+        Helpers.line(`resourceMethodType: ${getResourceMethodType(config)}`, 3),
+        Helpers.line(`}, newState);`, 2)
+    ];
+    const updatePageInfoStatus = needsPageInfo(config)
+        ? [Helpers.line(`newState = EntityPage.updatePageInfoState(_action.pageInfo, newState);`, 2)]
+        : [];
+    let reducerLines = [
+        Helpers.line(`on(${getActionsImportName(config.name)}.${actionName}, (state, _action) => {`),
+        ...(needsCriteria(config) ? updateCriteriaState : noCriteriaUpdate),
+        ...updateStatus,
+        ...updatePageInfoStatus,
+        Helpers.line(`return newState;`, 2),
+        Helpers.line(`})`)
+    ];
+    return Helpers.convertLines(reducerLines);
 }
 
 export function createSuccessReducer(config: IActionWorkflowSchema) {
     const actionName = `${config.actionPrefix}Success`;
-    // TODO: Support non-collection reads
-    const add = isRead(config) ? `let newState = adapter.setAll(action.entities, state);` : `let newState = { ...state };`;
-    const setTotalCount = needsPageInfo(config) ? 'EntityPage.updateTotalCount(action.totalCount, newState);' : undefined;
-    const updateStatus = `
-        newState = EntityStatus.updateStatusStateOnSuccess({
-            resourceMethodType: ${getResourceMethodType(config)}
-        }, newState);`;
-    const contents = [add, updateStatus, setTotalCount, 'return newState;']
-        .filter(c => c !== undefined)
-        .join(`${Helpers.TAB}${Helpers.TAB}\n`);
-    return `on(${getActionsImportName(config.name)}.${actionName}, (state, action) => {\n${contents}\n${Helpers.TAB}})`;
+    const lines = [
+        Helpers.line(`on(${getActionsImportName(config.name)}.${actionName}, (state, action) => {`),
+        // TODO: Support non-collection reads with upsert
+        Helpers.line(isRead(config) ? `let newState = adapter.setAll(action.entities, state);` : `let newState = { ...state };`, 2),
+        ...(needsPageInfo(config)
+            ? [Helpers.line('EntityPage.updateTotalCount(action.totalCount, newState);', 2)]
+            : []),
+        Helpers.line(`newState = EntityStatus.updateStatusStateOnSuccess({`, 2),
+        Helpers.line(`resourceMethodType: ${getResourceMethodType(config)}`, 3),
+        Helpers.line(`}, newState);`, 2),
+        Helpers.line(`return newState;`, 2),
+        Helpers.line(`})`)
+    ];
+    return Helpers.convertLines(lines);
 }
 
 export function createFailureReducer(config: IActionWorkflowSchema) {
     const actionName = `${config.actionPrefix}Failure`;
-    const updateStatus = `
-        let newState = EntityStatus.updateStatusStateOnSuccess({
-            resourceMethodType: ${getResourceMethodType(config)}
-        }, state);`;
-    const contents = [updateStatus, 'return newState;']
-        .filter(c => c !== undefined)
-        .join(`${Helpers.TAB}${Helpers.TAB}\n`);
-    return `on(${getActionsImportName(config.name)}.${actionName}, (state, action) => {\n${contents}\n${Helpers.TAB}})`;
+    const lines = [
+        Helpers.line(`on(${getActionsImportName(config.name)}.${actionName}, (state) => {`),
+        Helpers.line(`let newState = EntityStatus.updateStatusStateOnFailure({`, 2),
+        Helpers.line(`resourceMethodType: ${getResourceMethodType(config)}`, 3),
+        Helpers.line(`}, state);`, 2),
+        Helpers.line(`return newState;`, 2),
+        Helpers.line(`})`)
+    ];
+    return Helpers.convertLines(lines);
 }
 
 export function configureReducerChange(config: IActionWorkflowSchema) {
-    return `,\n${Helpers.TAB}${[createTriggerReducer(config), createSuccessReducer(config), createFailureReducer(config)].join(`,\n${Helpers.TAB}`)}\n`;
+    return `,\n${[createTriggerReducer(config), createSuccessReducer(config), createFailureReducer(config)].join(',\n')}`
 }

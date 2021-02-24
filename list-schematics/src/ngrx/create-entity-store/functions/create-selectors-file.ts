@@ -25,7 +25,7 @@ export function createStateSelector(name: string) {
 
 function createStatusSelector(name: string, verb: string, statusSelectorName: string) {
     return `
-export const is${strings.capitalize(name)}${strings.capitalize(verb)} = createSelector(
+export const is${strings.capitalize(name)}${strings.capitalize(verb)}Selector = createSelector(
     ${getStateSelectorName(name)},
     EntityStatus.${statusSelectorName}
 );`
@@ -33,7 +33,7 @@ export const is${strings.capitalize(name)}${strings.capitalize(verb)} = createSe
 
 function createPageSelector(name: string, suffix: string, pageSelectorName: string) {
     return `
-export const ${strings.camelize(name)}${strings.capitalize(suffix)} = createSelector(
+export const ${strings.camelize(name)}${strings.capitalize(suffix)}Selector = createSelector(
     ${getStateSelectorName(name)},
     EntityPage.${pageSelectorName}
 );`
@@ -56,11 +56,34 @@ export function createStatusSelectors(name: string) {
     return statusSelectors.join('\n');
 }
 
+function createDateTimeSelector(name: string, suffix: string, statusSelectorName: string) {
+    return `
+export const latest${strings.capitalize(name)}${strings.capitalize(suffix)}TimeSelector = createSelector(
+    ${getStateSelectorName(name)},
+    EntityStatus.${statusSelectorName}
+);`
+}
+
+export function createDateTimeSelectors(name: string) {
+    [
+        createDateTimeSelector(name, 'ReadFailure', 'failureTimeByMethodType(EntityStatus.EntityResourceMethod.Read)')
+    ].join('\n');
+}
+
+export function createCriteriaSelector(name: string) {
+    return `
+export const ${Helpers.getCriteriaSelectorName(name)} = createSelector(
+    ${getStateSelectorName(name)},
+    (state) => state.criteria
+);`
+}
+
 export function createPageSelectors(name: string) {
     const selectors = [
         createPageSelector(name, 'PageIndex', 'currentPageIndex'),
         createPageSelector(name, 'PageSize', 'currentPageSize'),
         createPageSelector(name, 'TotalCount', 'totalCount'),
+        createPageSelector(name, 'PageInfo', 'currentPageInfo')      
     ];
     return selectors.join('\n');
 }

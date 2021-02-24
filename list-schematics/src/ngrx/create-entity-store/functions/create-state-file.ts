@@ -10,7 +10,7 @@ export function createStateFileImports(options: ICreateEntityStoreSchema) {
     ] : [Helpers.getEntityInterfaceName(options.name)];
     imports += `\nimport { ${entityInterfaces.join(', ')} } from '${Helpers.getFilePath(options.name, 'entity')}';`;
     if (options.paginated) {
-        imports += `\nimport { IEntityPagedState } from '${options.pagedLibraryPath}';`;
+        imports += `\nimport { IEntityPageState } from '${options.pagedLibraryPath}';`;
     }
     imports += `\nimport { IEntityStatusState } from '${options.statusLibraryPath}';`;
     return imports;
@@ -26,7 +26,7 @@ export function createStateInterface(options: ICreateEntityStoreSchema) {
         `IEntityStatusState`
     ];
     if (options.paginated) {
-        interfaces = [...interfaces, `IEntityPagedState`];
+        interfaces = [...interfaces, `IEntityPageState`];
     }
     return `export interface ${Helpers.getStateName(options.name)} extends ${interfaces.join(', ')} { ${options.queryParams ? `\n${Helpers.TAB}criteria: ${Helpers.getEntityCriteriaInterfaceName(options.name)};\n` : ''}}`;
 }

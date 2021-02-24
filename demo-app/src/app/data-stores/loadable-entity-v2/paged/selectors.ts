@@ -1,5 +1,6 @@
-import { IEntityPagedState } from './interfaces';
+import { IEntityPageState } from './interfaces';
 
-export const currentPageIndex = (state: IEntityPagedState) => state?.pageInfo?.pageIndex ?? 0;
-export const currentPageSize = (state: IEntityPagedState) => state?.pageInfo?.pageSize ?? 0;
-export const totalCount = (state: IEntityPagedState) => state?.totalCount;
+export const currentPageInfo = (state: IEntityPageState) => state?.pageInfo;
+export const currentPageIndex = (state: IEntityPageState) => state?.pageInfo?.pageIndex ?? 0;
+export const currentPageSize = (state: IEntityPageState) => state?.pageInfo?.pageSize ?? 0;
+export const totalCount = (state: IEntityPageState) => state?.totalCount ?? 0;

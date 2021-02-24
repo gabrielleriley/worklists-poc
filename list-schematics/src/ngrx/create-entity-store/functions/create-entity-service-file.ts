@@ -1,8 +1,14 @@
 import { ICreateEntityStoreSchema } from "../schema.interface";
 import * as Helpers from '../../functions';
 
-export function createEntityServiceImports(_options: ICreateEntityStoreSchema) {
-    let imports = [`import { Injectable } from '@angular/core'`];
+export function createEntityServiceImports(options: ICreateEntityStoreSchema) {
+    let imports = [
+        `import { Injectable } from '@angular/core'`,
+        `import { Observable } from 'rxjs';`,
+        `import * as EntityPage from '${options.pagedLibraryPath}';`,
+        `import * as EntityStatus from '${options.statusLibraryPath}'`,
+        `import { ${Helpers.getEntityCriteriaInterfaceName(options.name)}, ${Helpers.getEntityInterfaceName(options.name)} } from '${Helpers.getFilePath(options.name, 'entity')}';`,
+    ];
     return imports.join('\n');
 }
 

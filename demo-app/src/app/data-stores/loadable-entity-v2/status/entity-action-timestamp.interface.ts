@@ -42,3 +42,8 @@ export interface IEntityStatusState {
     inProgressActions: IEntityActionTimestamp[];
     failedActions: IEntityActionTimestamp[];
 }
+
+export interface IEntityPayload<T> {
+    data: T;
+    errorMessage?: string;
+}

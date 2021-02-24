@@ -44,6 +44,8 @@ const failedActionsByActionName = (state: IEntityStatusState, workflowName: stri
 const hasResourceMethodTypeFailed = (state: IEntityStatusState, resourceMethodType: EntityResourceMethod) =>
     failedActionsByActionType(state, resourceMethodType).length > 0;
 
+export const failureTimeByMethodType = (state: IEntityStatusState, resourceMethodType: EntityResourceMethod) =>
+    failedActionsByActionType(state, resourceMethodType).map(ts => ts.timestamp).sort()[0];
 export const hasReadFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Read);
 export const hasCreationFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Create);
 export const hasUpdateFailed = (state: IEntityStatusState) => hasResourceMethodTypeFailed(state, EntityResourceMethod.Update);
