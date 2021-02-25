@@ -46,7 +46,7 @@ function createTriggerAction(options: IActionWorkflowSchema) {
 }
 
 function createSuccessAction(options: IActionWorkflowSchema) {
-    return `export const ${options.actionPrefix}Success = createAction(${createActionType(options, 'Trigger')}${getSuccessProps(options)});`;
+    return `export const ${options.actionPrefix}Success = createAction(${createActionType(options, 'Success')}${getSuccessProps(options)});`;
 }
 
 function createFailureAction(options: IActionWorkflowSchema) {
