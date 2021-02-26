@@ -1,5 +1,5 @@
-import { ActionProperty, getActionProps, ActionSuffix, getActionName, createActionTypeString } from "@shared/ngrx-helpers/action-helpers";
-import { line, convertLines } from "@shared/formatters";
+import { line, convertLines } from "../../../shared/formatters";
+import { ActionProperty, getActionProps, ActionSuffix, createActionTypeString, getActionName } from "../../../shared/ngrx-helpers";
 
 function createPropsDefinition(entityName: string, properties: ActionProperty[]) {
     const propsBaseIndent = 1;

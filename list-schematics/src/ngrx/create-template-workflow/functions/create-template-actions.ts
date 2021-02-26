@@ -1,6 +1,6 @@
-import { createFailureAction, createSuccessAction, createTriggerAction } from "@ngrx/shared/creation-functions";
 import { ITemplateWorkflowSchema } from "../schema.interface";
 import { getSuccessProperties, getTriggerProperties } from "./get-action-props";
+import { createTriggerAction, createSuccessAction, createFailureAction } from "../../shared/creation-functions";
 
 export function createActionsForTemplate(template: ITemplateWorkflowSchema) {
     const actionDefinition = {

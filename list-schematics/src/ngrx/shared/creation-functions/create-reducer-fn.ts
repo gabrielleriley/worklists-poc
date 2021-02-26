@@ -1,5 +1,5 @@
-import { convertLines, line } from "@shared/formatters";
-import { getStateName, ResourceMethodEnumEntry } from "@shared/ngrx-helpers";
+import { ResourceMethodEnumEntry, getStateName } from "../../../shared/ngrx-helpers";
+import { line, convertLines } from "../../../shared/formatters";
 
 function getResourceMethodType(type: ResourceMethodEnumEntry) {
     return `EntityStatus.EntityResourceMethod.${type}`;

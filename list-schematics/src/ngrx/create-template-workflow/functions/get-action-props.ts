@@ -1,4 +1,5 @@
-import { TemplateType } from "../schema.interface";import { ActionProperty } from "@shared/ngrx-helpers";
+import { TemplateType } from "../schema.interface";
+import { ActionProperty } from "../../../shared/ngrx-helpers";
 
 export function getTriggerProperties(templateType: TemplateType, hasCriteria = false) {
     switch (templateType) {

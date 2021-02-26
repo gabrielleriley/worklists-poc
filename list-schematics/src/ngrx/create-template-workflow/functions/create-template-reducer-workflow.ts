@@ -1,6 +1,6 @@
-import { IReducerConfig, ReducerAdapterAction, createReducerWorkflow } from "@ngrx/shared/creation-functions";
-import { ResourceMethodEnumEntry } from "@shared/ngrx-helpers";
 import { TemplateType, ITemplateWorkflowSchema } from "../schema.interface";
+import { ResourceMethodEnumEntry } from "../../../shared/ngrx-helpers";
+import { ReducerAdapterAction, IReducerConfig, createReducerWorkflow } from "../../shared/creation-functions";
 
 function getResourceMethod(templateType: TemplateType) {
     switch (templateType) {

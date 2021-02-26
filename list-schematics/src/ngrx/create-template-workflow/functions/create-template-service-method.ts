@@ -1,6 +1,6 @@
 import { ITemplateWorkflowSchema } from "../schema.interface";
-import { IEntityServiceConfig, getEntityServiceMethod } from "@ngrx/shared/creation-functions";
 import { getTriggerProperties, getSuccessProperties } from "./get-action-props";
+import { IEntityServiceConfig, getEntityServiceMethod } from "../../shared/creation-functions";
 
 export function createTemplateEntityServiceMethod(template: ITemplateWorkflowSchema) {
     const config: IEntityServiceConfig = {

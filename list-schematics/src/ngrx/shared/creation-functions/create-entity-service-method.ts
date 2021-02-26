@@ -1,5 +1,5 @@
-import { ActionProperty, getEntityInterfaceName, getActionProps, getEntityPageProperty, EntityPageProperty, getEntityStatusImport, getEntityStatusProperty, EntityStatusProperty } from "@shared/ngrx-helpers";
-import { line, convertLines } from "@ngrx/functions";
+import { line, convertLines } from "../../../shared/formatters";
+import { getActionProps, ActionProperty, getEntityInterfaceName, getEntityPageProperty, EntityPageProperty, getEntityStatusProperty, EntityStatusProperty } from "../../../shared/ngrx-helpers";
 
 function getResponseType(entityName: string, successProperties: ActionProperty[]) {
     const entityInterfaceName = getEntityInterfaceName(entityName);

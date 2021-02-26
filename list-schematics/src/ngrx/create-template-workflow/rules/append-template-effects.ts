@@ -1,7 +1,7 @@
 import { ITemplateWorkflowSchema } from "../schema.interface";
-import { appendToClassEnd } from "@shared/ast-helpers";
 import { createTemplateEffects } from "../functions/create-template-effects";
 import { Rule, Tree } from "@angular-devkit/schematics";
+import { appendToClassEnd } from "../../../shared/ast-helpers";
 
 export function appendTemplateEffectsRule(filePath: string, config: ITemplateWorkflowSchema): Rule {
     return (tree: Tree) => {
@@ -10,7 +10,7 @@ export function appendTemplateEffectsRule(filePath: string, config: ITemplateWor
 
         const declarationRecorder = tree.beginUpdate(filePath);
         if (change) {
-            declarationRecorder.insertLeft(change.position, contents);
+            declarationRecorder.insertLeft(change.position, `\n${contents}\n`);
         }
         tree.commitUpdate(declarationRecorder);
 

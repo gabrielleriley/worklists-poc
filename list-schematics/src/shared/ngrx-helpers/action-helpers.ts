@@ -1,8 +1,8 @@
 import { getEntityInterfaceName, getEntityCriteriaInterfaceName } from "./entity-name-helpers";
 import { getEntityPageProperty, EntityPageProperty } from "./import-helpers";
 import { strings } from "@angular-devkit/core";
-import { IKeyValue } from "@shared/interfaces";
-import { line } from "@shared/formatters";
+import { line } from "../formatters";
+import { IKeyValue } from "../interfaces";
 
 export enum ActionProperty {
     EntityList,

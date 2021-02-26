@@ -1,7 +1,7 @@
 import { ITemplateWorkflowSchema } from "../schema.interface";
 import { Rule, Tree } from "@angular-devkit/schematics";
-import { appendFunctionArgument } from "@shared/ast-helpers";
 import { createTemplateReducerWorkflow } from "../functions/create-template-reducer-workflow";
+import { appendFunctionArgument } from "../../../shared/ast-helpers";
 
 export function appendTemplateReducerRule(filePath: string, config: ITemplateWorkflowSchema): Rule {
     return (tree: Tree) => {

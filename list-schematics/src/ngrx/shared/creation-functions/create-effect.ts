@@ -1,5 +1,5 @@
-import { ActionProperty, getCurrentPageInfoSelectorName, getCriteriaSelectorName, getActionCallLines } from "@shared/ngrx-helpers";
-import { line, convertLines } from "@shared/formatters";
+import { line, convertLines } from "../../../shared/formatters";
+import { ActionProperty, getActionCallLines, getCurrentPageInfoSelectorName, getCriteriaSelectorName } from "../../../shared/ngrx-helpers";
 
 export interface IEffectDefinition {
     effectName: string;
@@ -17,9 +17,9 @@ function getWithLatestFrom(entityName: string, props: ActionProperty[]) {
     const getSelector = (prop: ActionProperty) => {
         switch (prop) {
             case ActionProperty.PageInfo:
-                return `this.store.pipe(select(${getCurrentPageInfoSelectorName(entityName)}))`;
+                return `this.store.pipe(select(Selectors.${getCurrentPageInfoSelectorName(entityName)}))`;
             case ActionProperty.EntityCriteria:
-                return `this.store.pipe(select(${getCriteriaSelectorName(entityName)}))`;
+                return `this.store.pipe(select(Selectors.${getCriteriaSelectorName(entityName)}))`;
             default:
                 return '';
         }
@@ -97,7 +97,7 @@ function createServiceRxjsMap(def: IEffectDefinition) {
     }
     const baseIndent = 4;
     const lines = [
-        line(`map((payload) => {)`, baseIndent),
+        line(`map((payload) => {`, baseIndent),
         line(`if(payload.errorMessage) {`, baseIndent + 1),
         ...getActionCallLines(
             `Actions.${def.failureActionName}`,
@@ -113,23 +113,23 @@ function createServiceRxjsMap(def: IEffectDefinition) {
             def.successProperties.map((p) => ({ key: p, value: getArg(p) }))
         ),
         line(`}`, baseIndent + 1),
-        line(`})`, baseIndent)
+        line(`}),`, baseIndent)
     ];
     return lines;
 }
 
 function createServiceCall(def: IEffectDefinition) {
     return [
-        line(`this.entityService.${def.serviceCallName}(${createServiceArgs(def.triggerProperties)}).pipe(`, 3),
+        line(`return this.entityService.${def.serviceCallName}(${createServiceArgs(def.triggerProperties)}).pipe(`, 3),
         ...createServiceRxjsMap(def),
-        line(`catchError(() => of(Actions.${def.failureActionName})())`),
+        line(`catchError(() => of(Actions.${def.failureActionName}()))`, 4),
         line(`);`, 3)
     ]
 }
 export function createSwitchedEffect(def: IEffectDefinition) {
     const lines = [
         line(`public ${def.effectName} = createEffect(() => this.actions.pipe(`, 1),
-        line(`ofType(${def.triggerActionName})`, 2),
+        line(`ofType(Actions.${def.triggerActionName}),`, 2),
         ...getWithLatestFrom(def.entityName, def.triggerProperties),
         line(`switchMap((${createMapArguments(def.triggerProperties)}) => {`, 2),
         ...createServiceCall(def),
@@ -142,7 +142,7 @@ export function createSwitchedEffect(def: IEffectDefinition) {
 export function createMergeEffect(def: IEffectDefinition) {
     const lines = [
         line(`public ${def.effectName} = createEffect(() => this.actions.pipe(`, 1),
-        line(`ofType(${def.triggerActionName})`, 2),
+        line(`ofType(Actions.${def.triggerActionName}),`, 2),
         ...getWithLatestFrom(def.entityName, def.triggerProperties),
         line(`mergeMap((${createMapArguments(def.triggerProperties)}) => {`, 2),
         ...createServiceCall(def),

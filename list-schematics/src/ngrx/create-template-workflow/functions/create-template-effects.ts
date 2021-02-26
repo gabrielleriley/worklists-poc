@@ -1,5 +1,5 @@
-import { createDispatchEffect, createMergeEffect, createSwitchedEffect, IEffectDefinition } from "@ngrx/shared/creation-functions";
-import { ActionSuffix, getActionName } from "@shared/ngrx-helpers";
+import { createDispatchEffect, createMergeEffect, createSwitchedEffect, IEffectDefinition } from "../../shared/creation-functions";
+import { ActionSuffix, getActionName } from "../../../shared/ngrx-helpers";
 import { ITemplateWorkflowSchema, TemplateType } from "../schema.interface";
 import { getSuccessProperties, getTriggerProperties } from "./get-action-props";
 

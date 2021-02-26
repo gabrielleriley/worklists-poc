@@ -24,10 +24,6 @@
       "jasmine",
       "node"
     ],
-    "paths": {
-      "@shared/*": ["src/shared/*"],
-      "@ngrx/*": ["src/ngrx/*"]
-    }
   },
   "include": [
     "src/**/*"

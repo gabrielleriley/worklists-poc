@@ -1,7 +1,7 @@
 import { ITemplateWorkflowSchema } from "./schema.interface";
 import { chain, Rule, Tree, SchematicContext } from "@angular-devkit/schematics";
-import { getFileName, getEntityServiceFileName } from "@ngrx/functions";
 import * as TemplateRule from './rules';
+import { getFileName, getEntityServiceFileName } from "../functions";
 
 export function createTemplateActionWorkflow(_options: ITemplateWorkflowSchema): Rule {
     _options.pagedLibraryPath = "@app/data-stores/loadable-entity-v2/paged";
