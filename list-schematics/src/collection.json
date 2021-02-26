@@ -17,9 +17,14 @@
       "schema": "./ngrx/create-entity-store/schema.json"
     },
     "create-action-workflow": {
-      "description": "Adds an action workflow to an existing NgRx store",
+      "description": "OBSOLETE - Adds an action workflow to an existing NgRx store",
       "factory": "./ngrx/create-action-workflow/index#createActionWorkflow",
       "schema": "./ngrx/create-action-workflow/schema.json"
+    },
+    "create-template-workflow": {
+      "description": "Adds an action template-based workflow to an existing NgRx store",
+      "factory": "./ngrx/create-template-workflow/index#createTemplateActionWorkflow",
+      "schema": "./ngrx/create-template-workflow/schema.json"
     }
   }
 }

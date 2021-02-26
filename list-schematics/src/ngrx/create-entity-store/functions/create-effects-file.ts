@@ -9,7 +9,7 @@ export function createEffectsImports(options: ICreateEntityStoreSchema) {
         `import { Store, select } from '@ngrx/store';`,
         `import { of } from 'rxjs';`,
         `import { withLatestFrom, switchMap, map, catchError, flatMap } from 'rxjs/operators';`,
-        `import * as StateActions from '${Helpers.getFilePath(options.name, 'actions')}';`,
+        `import * as Actions from '${Helpers.getFilePath(options.name, 'actions')}';`,
         `import * as Selectors from '${Helpers.getFilePath(options.name, 'selectors')}';`,
         `import * as EntityPage from '${options.pagedLibraryPath}'`,
         `import * as EntityStatus from '${options.statusLibraryPath}'`,

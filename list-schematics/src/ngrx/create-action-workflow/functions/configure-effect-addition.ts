@@ -50,7 +50,7 @@ function getSuccessProps(options: IActionWorkflowSchema) {
         case ApiResponseType.EntityList:
             let properties: string[];
             if (needsPageInfo(options)) {
-                properties = [`entities: payload.entities`, `totalCount: payload.totalCount`];
+                properties = [`entities: payload.data`, `totalCount: payload.totalCount`];
             } else {
                 properties = [`entities: payload.data`]
             }

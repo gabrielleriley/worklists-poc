@@ -1,0 +1,52 @@
+{
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What directory is the entity store located in?"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the store entity's name?"
+        },
+        "isPaginated": {
+            "type": "boolean",
+            "x-prompt": "Does the store support pagination?"
+        },
+        "hasCriteria": {
+            "type": "boolean",
+            "x-prompt": "Does the store support criteria?"
+        },
+        "featureArea": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What feature area will utilize this action workflow? (ex: User Edit Page)"
+        },
+        "template": {
+            "type": "string",
+            "enum": [
+                "Reload entities",
+                "Read multiple entities",
+                "Read page of entities",
+                "Create entity",
+                "Update entity",
+                "Patch entity",
+                "Delete entity by ID",
+                "Other by ID",
+                "Other"
+            ],
+            "x-prompt": "What CRUD action does the API use?"
+        },
+        "actionPrefix": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What should the actions be prefixed by? (ex: readUsers)"
+        },
+        "apiMethodName": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What should the API service method be named?"
+        }
+    }
+}

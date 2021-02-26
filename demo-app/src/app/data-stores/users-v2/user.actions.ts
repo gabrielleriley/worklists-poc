@@ -14,8 +14,13 @@ export interface IUserLoadProps {
 
 export const getUsersTriggerFromLeft = createAction(UserActionsActionWorkflowNames.GetFromLeft, props<IUserLoadProps>());
 export const getUsersTriggerFromRight = createAction(UserActionsActionWorkflowNames.GetFromRight, props<IUserLoadProps>());
-export const getUsersSuccessFromLeft = createAction('[Demo Left] Get Users Success',
-    props<{ totalCount: number, entities: IUserEntity[] }>());
+export const getUsersSuccessFromLeft = createAction(
+    '[Demo Left] Get Users Success',
+    props<{
+        totalCount: number,
+        entities: IUserEntity[]
+    }>()
+);
 export const getUsersSuccessFromRight = createAction('[Demo Right] Get Users Success',
     props<{ totalCount: number, entities: IUserEntity[] }>());
 export const getUsersFailureFromLeft = createAction('[Demo Left] Get Users Failure');

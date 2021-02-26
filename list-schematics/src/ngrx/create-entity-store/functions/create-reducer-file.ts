@@ -9,7 +9,7 @@ export function createReducerImports(options: ICreateEntityStoreSchema) {
     imports += `import { ${Helpers.getStateName(options.name)} } from '${Helpers.getFilePath(options.name, 'state')}';\n`;
     imports += `import * as EntityStatus from '${options.statusLibraryPath}';\n`;
     imports += `import * as EntityPage from '${options.pagedLibraryPath}';\n`;
-    imports += `import * as ${strings.classify(options.name)}Actions from '${Helpers.getFilePath(options.name, 'actions')}';\n`;
+    imports += `import * as Actions from '${Helpers.getFilePath(options.name, 'actions')}';\n`;
     return imports;
 }
 

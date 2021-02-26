@@ -13,7 +13,7 @@ export class UserEntityEffects {
         private store: Store,
         private userEntityService: UserEntityService,
         private actions: Actions
-    ) { 
+    ) {
         this.actions.subscribe((a) => console.log(a));
     }
 
@@ -22,7 +22,17 @@ export class UserEntityEffects {
         withLatestFrom(this.store.pipe(select(Selectors.usersPageInfo)), this.store.pipe(select(Selectors.usersCriteria))),
         switchMap(([action, pageInfo, criteria]) => {
             return this.userEntityService.loadPage(pageInfo, criteria).pipe(
-                map((res) => UserActions.getUsersSuccessFromLeft({ totalCount: res.totalCount, entities: res.entities })),
+                map((res) => {
+                    if (res.errorMessage) {
+                        return UserActions.getUsersFailureFromLeft();
+                    } 
+                    else {
+                        return UserActions.getUsersSuccessFromLeft({
+                            totalCount: res.totalCount, 
+                            entities: res.entities
+                        })
+                    }
+                }),
                 catchError(() => of(UserActions.getUsersFailureFromLeft()))
             );
         })

@@ -10,6 +10,6 @@ export interface IEntityPageState {
 
 export interface IPagedEntityPayload<T> {
     totalCount: number;
-    entities: T;
+    data: T;
     errorMessage?: string;
 }

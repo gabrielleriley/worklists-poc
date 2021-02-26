@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
+    "baseUrl": "./",
     "lib": [
       "es2018",
       "dom"
@@ -23,7 +23,11 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "paths": {
+      "@shared/*": ["src/shared/*"],
+      "@ngrx/*": ["src/ngrx/*"]
+    }
   },
   "include": [
     "src/**/*"
