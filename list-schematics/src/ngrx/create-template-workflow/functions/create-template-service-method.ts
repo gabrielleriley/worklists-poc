@@ -6,7 +6,7 @@ export function createTemplateEntityServiceMethod(template: ITemplateWorkflowSch
     const config: IEntityServiceConfig = {
         entityName: template.name,
         methodName: template.apiMethodName,
-        triggerProperties: getTriggerProperties(template.template),
+        triggerProperties: getTriggerProperties(template.template, template.hasCriteria),
         responseProperties: getSuccessProperties(template.template)
     };
     return getEntityServiceMethod(config);

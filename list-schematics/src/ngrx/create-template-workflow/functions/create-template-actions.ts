@@ -15,5 +15,5 @@ export function createActionsForTemplate(template: ITemplateWorkflowSchema) {
         createSuccessAction(actionDefinition, getSuccessProperties(template.template)),
         createFailureAction(actionDefinition, [])
     ];
-    return `\n${actions.join('\n')}\n`;
+    return `\n${actions.join('\n')}`;
 }

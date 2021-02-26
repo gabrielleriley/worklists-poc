@@ -17,10 +17,6 @@
         "queryParams": {
             "type": "boolean",
             "x-prompt": "Does the resource API support query parameters (sorting, filtering, etc)?"
-        },
-        "multiArea": {
-            "type": "boolean",
-            "x-prompt": "Will this store be used in multiple feature areas?"
         }
     }
 }

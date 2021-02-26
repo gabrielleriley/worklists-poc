@@ -1,7 +1,7 @@
-import { createDispatchEffect, createMergeEffect, createSwitchedEffect, IEffectDefinition } from "../../shared/creation-functions";
 import { ActionSuffix, getActionName } from "../../../shared/ngrx-helpers";
+import { createDispatchEffect, createMergeEffect, createSwitchedEffect, IEffectDefinition } from "../../shared/creation-functions";
 import { ITemplateWorkflowSchema, TemplateType } from "../schema.interface";
-import { getSuccessProperties, getTriggerProperties } from "./get-action-props";
+import { getEffectsTriggerProperties, getSuccessProperties } from "./get-action-props";
 
 function useSwitchEffect(templateType: TemplateType) {
     return [TemplateType.ReadMultiple, TemplateType.ReadPage]
@@ -16,7 +16,7 @@ export function createTemplateEffects(template: ITemplateWorkflowSchema) {
         triggerActionName: getActionName(template.actionPrefix, ActionSuffix.Trigger),
         successActionName: getActionName(template.actionPrefix, ActionSuffix.Success),
         failureActionName: getActionName(template.actionPrefix, ActionSuffix.Failure),
-        triggerProperties: getTriggerProperties(template.template),
+        triggerProperties: getEffectsTriggerProperties(template.template, template.hasCriteria, template.isPaginated),
         successProperties: getSuccessProperties(template.template),
         failureProperties: [],
     };
@@ -25,7 +25,7 @@ export function createTemplateEffects(template: ITemplateWorkflowSchema) {
         return createSwitchedEffect(config);
     } else if (template.template === TemplateType.Reload) {
         const dispatchEffect = createDispatchEffect(
-            `${template.actionPrefix}Effect`,
+            `${template.actionPrefix}DispatchEffect`,
             [],
             getActionName(template.actionPrefix, ActionSuffix.Trigger)
         );

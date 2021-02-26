@@ -1,7 +1,7 @@
 import { TemplateType } from "../schema.interface";
 import { ActionProperty } from "../../../shared/ngrx-helpers";
 
-export function getTriggerProperties(templateType: TemplateType, hasCriteria = false) {
+export function getTriggerProperties(templateType: TemplateType, hasCriteria: boolean) {
     switch (templateType) {
         case TemplateType.Reload:
         case TemplateType.Other:
@@ -24,6 +24,19 @@ export function getTriggerProperties(templateType: TemplateType, hasCriteria = f
             return [];
     }
 }
+
+export function getEffectsTriggerProperties(templateType: TemplateType, hasCriteria: boolean, isPaginated: boolean) {
+    switch (templateType) {
+        case TemplateType.Reload:
+            return [
+                ...(isPaginated ? [ActionProperty.PageInfo] : []),
+                ...(hasCriteria ? [ActionProperty.EntityCriteria] : []),
+            ];
+        default:
+            return getTriggerProperties(templateType, hasCriteria);
+    }
+}
+
 export function getSuccessProperties(templateType: TemplateType) {
     switch (templateType) {
         case TemplateType.Reload:

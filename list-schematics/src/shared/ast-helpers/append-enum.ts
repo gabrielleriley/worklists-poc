@@ -1,10 +1,10 @@
-import { InsertChange } from "../interfaces";
+import { IAppendPosition } from "../interfaces";
 import { getSourceNodes } from "./ast-helpers";
 import { Tree } from "@angular-devkit/schematics/src/tree/interface";
 import { SchematicsException } from "@angular-devkit/schematics";
 import ts = require("typescript");
 
-export function appendEnum(filePath: string, tree: Tree, identifierName: string): InsertChange {
+export function appendEnum(filePath: string, tree: Tree, identifierName: string): IAppendPosition {
     let text = tree.read(filePath);
     if (!text) {
         throw new SchematicsException('File not found at: ' + filePath);

@@ -1,9 +1,9 @@
 import { getSourceNodes } from "./ast-helpers";
-import { InsertChange } from "../interfaces";
+import { IAppendPosition } from "../interfaces";
 import { SchematicsException, Tree } from "@angular-devkit/schematics";
 import * as ts from 'typescript';
 
-export function appendToFileEnd(filePath: string, tree: Tree): InsertChange {
+export function appendToFileEnd(filePath: string, tree: Tree): IAppendPosition {
     let text = tree.read(filePath);
     if (!text) {
         throw new SchematicsException('File not found at: ' + filePath);

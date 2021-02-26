@@ -7,6 +7,7 @@ import { IKeyValue } from "../interfaces";
 export enum ActionProperty {
     EntityList,
     SingleEntity,
+    SinglePartialEntity,
     PageInfo,
     TotalCount,
     EntityCriteria,
@@ -33,6 +34,7 @@ export function getActionPropertyName(property: ActionProperty): string {
         case ActionProperty.EntityList:
             return 'entities';
         case ActionProperty.SingleEntity:
+        case ActionProperty.SinglePartialEntity:
             return 'entity';
         case ActionProperty.PageInfo:
             return 'pageInfo';
@@ -53,6 +55,7 @@ export function getActionProps(entityName: string, props: ActionProperty[]): str
     const properties = {
         [ActionProperty.EntityList]: `${getActionPropertyName(ActionProperty.EntityList)}: ${getEntityInterfaceName(entityName)}[]`,
         [ActionProperty.SingleEntity]: `${getActionPropertyName(ActionProperty.SingleEntity)}: ${getEntityInterfaceName(entityName)}`,
+        [ActionProperty.SinglePartialEntity]: `${getActionPropertyName(ActionProperty.SinglePartialEntity)}: Partial<${getEntityInterfaceName(entityName)}>`,
         [ActionProperty.PageInfo]: `${getActionPropertyName(ActionProperty.PageInfo)}: Partial<${getEntityPageProperty(EntityPageProperty.PageInfoInterface)}>`,
         [ActionProperty.TotalCount]: `${getActionPropertyName(ActionProperty.TotalCount)}: number`,
         [ActionProperty.EntityCriteria]: `${getActionPropertyName(ActionProperty.EntityCriteria)}: Partial<${getEntityCriteriaInterfaceName(entityName)}>`,
@@ -70,15 +73,15 @@ export function getActionCallLines(
 ) {
     if (props.length === 0) {
         return [
-            line(`${includeReturn ? 'return ' : '' }${actionName}()`, baseIndent)
+            line(`${includeReturn ? 'return ' : '' }${actionName}();`, baseIndent)
         ];
     } else {
         return [
             line(`${includeReturn ? 'return ' : '' }${actionName}({`, baseIndent),
             ...props.map((p) => {
-                return line(`${getActionPropertyName(p.key)}: ${p.value},`)
+                return line(`${getActionPropertyName(p.key)}: ${p.value},`, baseIndent + 1)
             }),
-            line(`})`, baseIndent)
+            line(`});`, baseIndent)
         ]
     }
 }

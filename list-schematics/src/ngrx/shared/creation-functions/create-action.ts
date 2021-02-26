@@ -10,7 +10,7 @@ function createPropsDefinition(entityName: string, properties: ActionProperty[])
         ...interfaceProperties,
         line(`}>()`, propsBaseIndent),
     ];
-    return lines;
+    return interfaceProperties.length > 0 ? lines : [];
 }
 
 interface IActionDefinition {
@@ -23,7 +23,7 @@ interface IActionDefinition {
 function createAction(suffix: ActionSuffix, definition: IActionDefinition, properties: ActionProperty[]): string {
     const lines = [
         line(`export const ${getActionName(definition.prefix, suffix)} = createAction(`, 0),
-        line(createActionTypeString(definition.entityName, definition.featureName, definition.description), 1),
+        line(`${createActionTypeString(definition.entityName, definition.featureName, definition.description)},`, 1),
         ...createPropsDefinition(definition.entityName, properties),
         line(`);`, 0)
     ];

@@ -9,7 +9,7 @@ export function createReducerImports(options: ICreateEntityStoreSchema) {
     imports += `import { ${Helpers.getStateName(options.name)} } from '${Helpers.getFilePath(options.name, 'state')}';\n`;
     imports += `import * as EntityStatus from '${options.statusLibraryPath}';\n`;
     imports += `import * as EntityPage from '${options.pagedLibraryPath}';\n`;
-    imports += `import * as Actions from '${Helpers.getFilePath(options.name, 'actions')}';\n`;
+    imports += `import * as EntityAction from '${Helpers.getFilePath(options.name, 'actions')}';\n`;
     return imports;
 }
 
@@ -32,7 +32,7 @@ export function createInitialState(options: ICreateEntityStoreSchema) {
 export function createReducer(options: ICreateEntityStoreSchema) {
     return `export const ${Helpers.getReducerName(options.name)} = createReducer(
 ${Helpers.TAB}initialState,
-${Helpers.TAB}on(${strings.classify(options.name)}Actions.${Helpers.createActionName(options.name, 'clear', 'Store')}, () => ({ ...initialState }))
+${Helpers.TAB}on(EntityAction.${Helpers.createActionName(options.name, 'clear', 'Store')}, () => ({ ...initialState }))
 );`;
 }
 

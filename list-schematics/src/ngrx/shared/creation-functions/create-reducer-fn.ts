@@ -40,12 +40,12 @@ function createTriggerReducer(config: IReducerConfig) {
         ? [line(`newState = EntityPage.updatePageInfoState(_action.pageInfo, newState);`, 2)]
         : [];
     let reducerLines = [
-        line(`on(Actions.${actionName}, (state, _action) => {`),
+        line(`on(EntityAction.${actionName}, (state, _action) => {`),
         ...(config.updateCriteria ? updateCriteriaState : noCriteriaUpdate),
         ...updateStatus,
         ...updatePageInfoStatus,
         line(`return newState;`, 2),
-        line(`})`)
+        line(`}),`)
     ];
     return reducerLines;
 }
@@ -53,7 +53,7 @@ function createTriggerReducer(config: IReducerConfig) {
 export function createSuccessReducer(config: IReducerConfig) {
     const actionName = `${config.actionPrefix}Success`;
     const lines = [
-        line(`on(Actions.${actionName}, (state, action) => {`),
+        line(`on(EntityAction.${actionName}, (state, action) => {`),
         // TODO: Support non-collection reads with upsert
         line(config.adapterAction === ReducerAdapterAction.SetAll ? `let newState = adapter.setAll(action.entities, state);` : `let newState = { ...state };`, 2),
         ...(config.updatePaging
@@ -63,7 +63,7 @@ export function createSuccessReducer(config: IReducerConfig) {
         line(`resourceMethodType: ${getResourceMethodType(config.resourceMethodEntry)}`, 3),
         line(`}, newState);`, 2),
         line(`return newState;`, 2),
-        line(`})`)
+        line(`}),`)
     ];
     return lines;
 }
@@ -71,8 +71,8 @@ export function createSuccessReducer(config: IReducerConfig) {
 export function createFailureReducer(config: IReducerConfig) {
     const actionName = `${config.actionPrefix}Failure`;
     const lines = [
-        line(`on(Actions.${actionName}, (state) => {`),
-        line(`let newState = EntityStatus.updateStatusStateOnFailure({`, 2),
+        line(`on(EntityAction.${actionName}, (state) => {`),
+        line(`const newState = EntityStatus.updateStatusStateOnFailure({`, 2),
         line(`resourceMethodType: ${getResourceMethodType(config.resourceMethodEntry)}`, 3),
         line(`}, state);`, 2),
         line(`return newState;`, 2),

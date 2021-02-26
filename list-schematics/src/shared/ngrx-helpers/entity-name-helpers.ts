@@ -15,7 +15,7 @@ export function getStateNameVariable(name: string) {
 }
 
 export function getStateName(name: string) {
-    return `${strings.classify(name)}EntityState`;
+    return `I${strings.classify(name)}EntityState`;
 }
 
 // Selectors

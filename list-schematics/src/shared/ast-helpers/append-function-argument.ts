@@ -1,10 +1,10 @@
 import { SchematicsException } from "@angular-devkit/schematics";
 import { Tree } from "@angular-devkit/schematics/src/tree/interface";
-import { InsertChange } from "../interfaces";
+import { IAppendPosition } from "../interfaces";
 import ts = require("typescript");
 import { getSourceNodes } from "./ast-helpers";
 
-export function appendFunctionArgument(filePath: string, identifierName: string, tree: Tree): InsertChange {
+export function appendFunctionArgument(filePath: string, identifierName: string, tree: Tree): IAppendPosition {
     let text = tree.read(filePath);
     if (!text) {
         throw new SchematicsException('File not found at: ' + filePath);

@@ -4,3 +4,5 @@ export * from './append-to-class';
 export * from './append-to-file';
 export * from './file-contains-method-declaration';
 export * from './ast-helpers';
+export * from './append-named-import';
+export * from './append-namespace-import';

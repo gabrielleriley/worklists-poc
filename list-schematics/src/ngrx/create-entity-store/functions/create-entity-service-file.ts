@@ -7,7 +7,7 @@ export function createEntityServiceImports(options: ICreateEntityStoreSchema) {
         `import { Observable } from 'rxjs';`,
         `import * as EntityPage from '${options.pagedLibraryPath}';`,
         `import * as EntityStatus from '${options.statusLibraryPath}'`,
-        `import { ${Helpers.getEntityCriteriaInterfaceName(options.name)}, ${Helpers.getEntityInterfaceName(options.name)} } from '${Helpers.getFilePath(options.name, 'entity')}';`,
+        `import { ${options.queryParams ? `Helpers.getEntityCriteriaInterfaceName(options.name), ` : '' } ${Helpers.getEntityInterfaceName(options.name)} } from '${Helpers.getFilePath(options.name, 'entity')}';`,
     ];
     return imports.join('\n');
 }

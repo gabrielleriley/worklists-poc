@@ -10,7 +10,7 @@ export function appendTemplateReducerRule(filePath: string, config: ITemplateWor
 
         const declarationRecorder = tree.beginUpdate(filePath);
         if (change) {
-            declarationRecorder.insertLeft(change.position, newContents);
+            declarationRecorder.insertLeft(change.position, `,\n${newContents.trimEnd()}`);
         }
         tree.commitUpdate(declarationRecorder);
 
