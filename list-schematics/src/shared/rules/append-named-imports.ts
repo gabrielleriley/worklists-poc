@@ -16,9 +16,10 @@ function appendImport(filePath: string, namedImport: IVerifyNamedImport): Rule {
 }
 export function appendNamedImportsRule(filePath: string, namedImports: IVerifyNamedImport[]): Rule {
     return (tree: Tree, context: SchematicContext) => {
+        console.log('APPEND RULE');
         const ruleChain = chain(
             namedImports.map((ni) => appendImport(filePath, ni))
         );
-        ruleChain(tree, context);
+        return ruleChain(tree, context);
     }
 }

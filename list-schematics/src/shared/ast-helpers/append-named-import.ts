@@ -17,19 +17,27 @@ export function appendNamedImports(filePath: string, tree: Tree, verify: IVerify
     let sourceText = text.toString('utf-8');
     let sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true);
     let nodes: ts.Node[] = getSourceNodes(sourceFile);
-    const matchingModuleNode = nodes.find(n =>
-        n.kind === ts.SyntaxKind.StringLiteral
-        && n.getText() === verify.moduleSpecifier
-        && n.parent.kind === ts.SyntaxKind.ImportClause);
-    if (matchingModuleNode) {
-        const importClauseNode = matchingModuleNode.parent;
-        const namedImports = importClauseNode.getChildren().find(c => c.kind === ts.SyntaxKind.NamedImports) as ts.Node;
-        const importSpecifiers = namedImports.getChildren().filter(n => n.kind === ts.SyntaxKind.ImportSpecifier);
-        const importSpecifierNames = importSpecifiers.map(s => s.getText());
-        const missingImportSpecifiers = verify.namedImports.filter(ni => !importSpecifierNames.includes(ni));
-        const lastImportSpecifier = importSpecifiers[importSpecifiers.length - 1];
-        return { position: lastImportSpecifier?.getEnd() ?? 0, filePath, contents: `${missingImportSpecifiers.join(', ')}` };
+    // ImportDeclaration -> ImportClause -> NamedImports -> ImportSpecifier -> Identifier
+    // ImportDeclaration -> StringLiteral (module specifier)
+    const matchingModuleImportLiteral = nodes.find(n =>
+        (n.getText() === `'${verify.moduleSpecifier}'`
+            || n.getText() === `"${verify.moduleSpecifier}"`)
+        && n.parent.kind === ts.SyntaxKind.ImportDeclaration);
+    if (matchingModuleImportLiteral) {
+        const importDeclaration = matchingModuleImportLiteral.parent;
+        const importClause = importDeclaration.getChildren().find(c => c.kind === ts.SyntaxKind.ImportClause);
+        const namedImports = importClause?.getChildren().find(c => c.kind === ts.SyntaxKind.NamedImports);
+        const specifiers = namedImports?.getChildren() as ts.Node[];
+        const identifers = specifiers?.map(s => s.getChildren())
+            .reduce((acc, curr) => [...acc, ...curr], []);
+        const existingImportNames = identifers
+            .map(n => n.getText())
+            .filter(n => n !== ',');
+        const missingImportSpecifiers = verify.namedImports.filter(ni => !existingImportNames?.includes(ni));
+        const lastIdentifer = identifers[identifers.length - 1];
+        return { position: lastIdentifer.getEnd() ?? 0, filePath, contents: `, ${missingImportSpecifiers.join(', ')}` };
     } else {
+        console.log('MATCHING IMPORT NOT FOUND' + verify.moduleSpecifier);
         const importLine = `import { ${verify.namedImports.join(', ')} } from '${verify.moduleSpecifier}';`;
         const importClauses = nodes.filter(n => n.kind === ts.SyntaxKind.ImportDeclaration);
         return { position: importClauses[importClauses.length - 1]?.getEnd() ?? 0, contents: `\n${importLine}\n`, filePath };

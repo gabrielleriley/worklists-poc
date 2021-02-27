@@ -12,7 +12,6 @@ export function createTemplateActionWorkflow(_options: ITemplateWorkflowSchema):
     _options.statusLibraryPath = "@app/data-stores/loadable-entity-v2/status";
     return (_tree: Tree, _context: SchematicContext) => {
         const rule = chain([
-            TemplateRule.doThing(`src/${_options.directory}/${getFileName(_options.name, 'actions')}.ts`, _options),
             TemplateRule.appendTemplateActionsRule(`src/${_options.directory}/${getFileName(_options.name, 'actions')}.ts`, _options),
             TemplateRule.appendTemplateReducerRule(`src/${_options.directory}/${getFileName(_options.name, 'reducer')}.ts`, _options),
             TemplateRule.appendToEntityServiceRule(`src/${_options.directory}/${getEntityServiceFileName(_options.name)}.ts`, _options),

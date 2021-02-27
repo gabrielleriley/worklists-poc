@@ -25,12 +25,11 @@ export class UserEntityEffects {
                 map((res) => {
                     if (res.errorMessage) {
                         return UserActions.getUsersFailureFromLeft();
-                    } 
-                    else {
+                    } else {
                         return UserActions.getUsersSuccessFromLeft({
-                            totalCount: res.totalCount, 
+                            totalCount: res.totalCount,
                             entities: res.entities
-                        })
+                        });
                     }
                 }),
                 catchError(() => of(UserActions.getUsersFailureFromLeft()))
