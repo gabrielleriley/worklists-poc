@@ -14,6 +14,7 @@ export function appendNamespaceImports(filePath: string, tree: Tree, verify: IVe
     const importNodes = nodes.filter(n => n.kind === ts.SyntaxKind.NamespaceImport);
     const children = importNodes.reduce((acc, curr) => [...acc, ...curr.getChildren()], []);
     const unfoundNamespaces = verify.filter(v => !children.some(n => n.kind === ts.SyntaxKind.Identifier && n.getText() === v.namespace));
-    const imports = unfoundNamespaces.map(ns => `import * as ${ns.namespace} from '${ns.moduleSpecifier}'`).join(`\n`);
-    return [{ filePath, position: 0, contents: `${imports}\n` }];
+    const imports = unfoundNamespaces.map(ns => `import * as ${ns.namespace} from '${ns.moduleSpecifier}';`).join(`\n`);
+    const contents = imports.length > 0 ? `${imports}\n` : '';
+    return [{ filePath, position: 0, contents }];
 }

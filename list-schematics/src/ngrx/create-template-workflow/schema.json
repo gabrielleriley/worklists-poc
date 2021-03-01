@@ -26,7 +26,6 @@
         "template": {
             "type": "string",
             "enum": [
-                "Reload entities",
                 "Read multiple entities",
                 "Read page of entities",
                 "Create entity",

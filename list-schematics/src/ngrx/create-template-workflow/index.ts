@@ -14,6 +14,7 @@ export function createTemplateActionWorkflow(_options: ITemplateWorkflowSchema):
         const rule = chain([
             TemplateRule.appendTemplateActionsRule(`src/${_options.directory}/${getFileName(_options.name, 'actions')}.ts`, _options),
             TemplateRule.appendTemplateReducerRule(`src/${_options.directory}/${getFileName(_options.name, 'reducer')}.ts`, _options),
+            TemplateRule.appendTemplateReducerSpecRule(`src/${_options.directory}/${getFileName(_options.name, 'reducer.spec')}.ts`, _options),
             TemplateRule.appendToEntityServiceRule(`src/${_options.directory}/${getEntityServiceFileName(_options.name)}.ts`, _options),
             TemplateRule.appendTemplateEffectsRule(`src/${_options.directory}/${getFileName(_options.name, 'effects')}.ts`, _options)
         ]);

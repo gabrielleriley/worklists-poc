@@ -24,7 +24,7 @@ function createTriggerReducer(config: IReducerConfig) {
     const updateCriteriaState = [
         line(`let newState: ${getStateName(config.entityName)} = {`, 2),
         line(`...state,`, 3),
-        line(`criteria: { ...state.criteria, ..._action.criteria }`, 3),
+        line(`criteria: { ...state.criteria, ...action.criteria }`, 3),
         line(`};`, 2)
     ];
     const noCriteriaUpdate = [
@@ -37,10 +37,10 @@ function createTriggerReducer(config: IReducerConfig) {
         line(`}, newState);`, 2)
     ];
     const updatePageInfoStatus = config.updatePaging
-        ? [line(`newState = EntityPage.updatePageInfoState(_action.pageInfo, newState);`, 2)]
+        ? [line(`newState = EntityPage.updatePageInfoState(action.pageInfo, newState);`, 2)]
         : [];
     let reducerLines = [
-        line(`on(EntityAction.${actionName}, (state, _action) => {`),
+        line(`on(EntityAction.${actionName}, (state, action) => {`),
         ...(config.updateCriteria ? updateCriteriaState : noCriteriaUpdate),
         ...updateStatus,
         ...updatePageInfoStatus,

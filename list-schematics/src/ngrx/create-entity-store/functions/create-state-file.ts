@@ -28,5 +28,5 @@ export function createStateInterface(options: ICreateEntityStoreSchema) {
     if (options.paginated) {
         interfaces = [...interfaces, `IEntityPageState`];
     }
-    return `export interface ${Helpers.getStateName(options.name)} extends ${interfaces.join(', ')} { ${options.queryParams ? `\n${Helpers.TAB}criteria: ${Helpers.getEntityCriteriaInterfaceName(options.name)};\n` : ''}}`;
+    return `export interface ${Helpers.getStateName(options.name)} extends ${interfaces.join(', ')} {${options.queryParams ? `\n${Helpers.TAB}criteria: ${Helpers.getEntityCriteriaInterfaceName(options.name)};\n` : ''}}`;
 }

@@ -6,7 +6,7 @@ export function createSelectorsImports(options: ICreateEntityStoreSchema) {
     let imports = [
         `import { createFeatureSelector, createSelector } from '@ngrx/store';`,
         `import * as EntityStatus from '${options.statusLibraryPath}';`,
-        `import { ${Helpers.getStateNameVariable(options.name)}, ${Helpers.getStateName(options.name)} } from '${Helpers.getFilePath(options.name, 'state')}'`,
+        `import { ${Helpers.getStateNameVariable(options.name)}, ${Helpers.getStateName(options.name)} } from '${Helpers.getFilePath(options.name, 'state')}';`,
         `import { selectAll${strings.classify(options.name)} } from '${Helpers.getFilePath(options.name, 'reducer')}';`,
     ];
     if (options.paginated) {

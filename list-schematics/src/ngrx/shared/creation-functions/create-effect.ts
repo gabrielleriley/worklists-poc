@@ -32,7 +32,9 @@ function getWithLatestFrom(entityName: string, props: ActionProperty[]) {
     } else {
         return [
             line(`withLatestFrom(`, 2),
-            ...selectors.map((l) => line(l, 3)),
+            ...selectors.map((l, index) => line(
+                index < selectors.length - 1
+                    ? `${l},` : l, 3)),
             line(`),`, 2)
         ];
     }
@@ -50,7 +52,7 @@ function createMapArguments(properties: ActionProperty[]) {
         }
     }
     const args = [
-        '_action',
+        'action',
         ...properties.map((p) => getArg(p)).filter(p => p)
     ];
     return args.length > 1 ? `[${args.join(', ')}]` : args[0];
@@ -60,11 +62,12 @@ function createServiceArgs(properties: ActionProperty[]) {
     const getArgName = (prop: ActionProperty) => {
         switch (prop) {
             case ActionProperty.SingleEntityId:
-                return '_action.id';
+                return 'action.id';
             case ActionProperty.EntityIdList:
-                return `_action.ids`;
+                return `action.ids`;
             case ActionProperty.SingleEntity:
-                return '_action.entity';
+            case ActionProperty.SinglePartialEntity:
+                return 'action.entity';
             case ActionProperty.PageInfo:
                 return 'pageInfo';
             case ActionProperty.EntityCriteria:
@@ -75,6 +78,7 @@ function createServiceArgs(properties: ActionProperty[]) {
         ActionProperty.SingleEntityId,
         ActionProperty.EntityIdList,
         ActionProperty.SingleEntity,
+        ActionProperty.SinglePartialEntity,
         ActionProperty.PageInfo,
         ActionProperty.EntityCriteria
     ].filter(p => properties.includes(p)).map(p => getArgName(p));
@@ -87,6 +91,7 @@ function createServiceRxjsMap(def: IEffectDefinition) {
             case ActionProperty.EntityIdList:
             case ActionProperty.EntityList:
             case ActionProperty.SingleEntity:
+            case ActionProperty.SinglePartialEntity:
             case ActionProperty.SingleEntityId:
                 return 'payload.data';
             case ActionProperty.TotalCount:
@@ -102,13 +107,13 @@ function createServiceRxjsMap(def: IEffectDefinition) {
         ...getActionCallLines(
             `EntityActions.${def.failureActionName}`,
             baseIndent + 2,
-            true
+            'return '
         ),
         line(`} else {`, baseIndent + 1),
         ...getActionCallLines(
             `EntityActions.${def.successActionName}`,
             baseIndent + 2,
-            true,
+            'return ',
             def.successProperties.map((p) => ({ key: p, value: getArg(p) }))
         ),
         line(`}`, baseIndent + 1),
@@ -158,7 +163,7 @@ export function createDispatchEffect(effectName: string, triggerActions: string[
         line(`// TODO: Add any action types that should dispatch the final action to the ofType operator`, 3),
         ...triggerActions.map((ta) => line(`${ta},`, 3)),
         line(`),`, 2),
-        line(`mapTo(${dispatchAction}())`, 2),
+        line(`mapTo(EntityActions.${dispatchAction}())`, 2),
         line(`));`, 1)
     ];
     return convertLines(lines);

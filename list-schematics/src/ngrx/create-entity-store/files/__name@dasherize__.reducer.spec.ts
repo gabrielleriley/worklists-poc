@@ -9,10 +9,8 @@ const initialState: I<%= capitalize(name) %>EntityState = {
     completedActions: [],
     inProgressActions: [],
     failedActions: [],
-    // IF paged
     <% if(paginated) { %>totalCount: 0,
     pageInfo: { pageIndex: 0, pageSize: 12 },<%}%>
-    // IF criteria
     <% if(queryParams) {%>criteria: undefined,<%}%>
 };
 describe('Test Reducer', () => {
@@ -31,22 +29,22 @@ describe('Test Reducer', () => {
             expect(newState.failedActions.length).toEqual(0);
         });
 
-        it('should revert page info to initial state', () => {
+        <% if(paginated) { %>it('should revert page info to initial state', () => {
             const state: I<%= capitalize(name) %>EntityState = {
                 ...initialState,
                 pageInfo: { pageIndex: 10, pageSize: 100 }
             };
             const newState = EntityReducer.<%= camelize(name) %>Reducer(state, EntityAction.clear<%= capitalize(name) %>Store);
             expect(newState.pageInfo).toEqual({ pageIndex: 0, pageSize: 12 });
-        });
+        });<%}%>
 
-        it('should criteria to undefined', () => {
+        <% if(queryParams) {%>it('should criteria to undefined', () => {
             const state: I<%= capitalize(name) %>EntityState = {
                 ...initialState,
                 criteria: { }
             };
             const newState = EntityReducer.<%= camelize(name) %>Reducer(state, EntityAction.clear<%= capitalize(name) %>Store);
             expect(newState.criteria).toBeUndefined();
-        });
+        });<%}%>
     });
 });

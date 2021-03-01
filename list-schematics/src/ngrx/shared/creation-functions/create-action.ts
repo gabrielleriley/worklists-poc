@@ -31,14 +31,17 @@ function createAction(suffix: ActionSuffix, definition: IActionDefinition, prope
 }
 
 export function createTriggerAction(definition: IActionDefinition, properties: ActionProperty[]): string {
+    definition.description = `${definition.description} - Trigger`;
     return createAction(ActionSuffix.Trigger, definition, properties);
 }
 
 export function createSuccessAction(definition: IActionDefinition, properties: ActionProperty[]) {
+    definition.description = `${definition.description} - Success`;
     return createAction(ActionSuffix.Success, definition, properties);
 }
 
 export function createFailureAction(definition: IActionDefinition, properties: ActionProperty[]) {
+    definition.description = `${definition.description} - Failure`;
     return createAction(ActionSuffix.Failure, definition, properties);
 }
 

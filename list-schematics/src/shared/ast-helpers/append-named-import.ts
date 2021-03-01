@@ -1,13 +1,8 @@
-import { IInsertChange } from "../interfaces";
+import { IInsertChange, IVerifyNamedImport } from "../interfaces";
 import { Tree } from "@angular-devkit/schematics/src/tree/interface";
 import { SchematicsException } from "@angular-devkit/schematics";
 import ts = require("typescript");
 import { getSourceNodes } from "./ast-helpers";
-
-export interface IVerifyNamedImport {
-    namedImports: string[];
-    moduleSpecifier: string;
-}
 
 export function appendNamedImports(filePath: string, tree: Tree, verify: IVerifyNamedImport): IInsertChange {
     let text = tree.read(filePath);
@@ -33,12 +28,15 @@ export function appendNamedImports(filePath: string, tree: Tree, verify: IVerify
         const existingImportNames = identifers
             .map(n => n.getText())
             .filter(n => n !== ',');
-        const missingImportSpecifiers = verify.namedImports.filter(ni => !existingImportNames?.includes(ni));
+        const missingImportSpecifiers = verify.names.filter(ni => !existingImportNames?.includes(ni));
         const lastIdentifer = identifers[identifers.length - 1];
-        return { position: lastIdentifer.getEnd() ?? 0, filePath, contents: `, ${missingImportSpecifiers.join(', ')}` };
+        const contents =
+            missingImportSpecifiers.length > 0
+                ? `, ${missingImportSpecifiers.join(', ')}`
+                : '';
+        return { position: lastIdentifer?.getEnd() ?? 0, filePath, contents };
     } else {
-        console.log('MATCHING IMPORT NOT FOUND' + verify.moduleSpecifier);
-        const importLine = `import { ${verify.namedImports.join(', ')} } from '${verify.moduleSpecifier}';`;
+        const importLine = `import { ${verify.names.join(', ')} } from '${verify.moduleSpecifier}';`;
         const importClauses = nodes.filter(n => n.kind === ts.SyntaxKind.ImportDeclaration);
         return { position: importClauses[importClauses.length - 1]?.getEnd() ?? 0, contents: `\n${importLine}\n`, filePath };
     }

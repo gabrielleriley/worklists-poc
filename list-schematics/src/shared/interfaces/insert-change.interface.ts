@@ -13,3 +13,13 @@ export interface IVerifyNamespaceImport {
     namespace: string;
     moduleSpecifier: string;
 }
+
+export interface IVerifyNamedImport {
+    names: string[];
+    moduleSpecifier: string;
+}
+
+export interface IVerifyImports {
+    namespaceImports?: IVerifyNamespaceImport[];
+    namedImports?: IVerifyNamedImport[];
+}

@@ -7,8 +7,8 @@ export function createModuleFileImports(options: ICreateEntityStoreSchema) {
         `import { EffectsModule } from '@ngrx/effects';`,
         `import { StoreModule } from '@ngrx/store';`,
         `import { ${Helpers.getEntityEffectsName(options.name)} } from '${Helpers.getFilePath(options.name, 'effects')}';`,
-        `import { ${Helpers.getReducerName(options.name)} } from '${Helpers.getFilePath(options.name, 'reducer')}'`,
-        `import { ${Helpers.getStateNameVariable(options.name)} } from '${Helpers.getFilePath(options.name, 'state')}'`,
+        `import { ${Helpers.getReducerName(options.name)} } from '${Helpers.getFilePath(options.name, 'reducer')}';`,
+        `import { ${Helpers.getStateNameVariable(options.name)} } from '${Helpers.getFilePath(options.name, 'state')}';`,
     ];
     return imports.join('\n');
 }

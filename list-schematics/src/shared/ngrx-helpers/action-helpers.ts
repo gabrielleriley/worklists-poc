@@ -68,16 +68,16 @@ export function getActionProps(entityName: string, props: ActionProperty[]): str
 export function getActionCallLines(
     actionName: string,
     baseIndent: number,
-    includeReturn: boolean,
+    prefixFirstLine: string,
     props: IKeyValue<ActionProperty, string>[] = [],
 ) {
     if (props.length === 0) {
         return [
-            line(`${includeReturn ? 'return ' : '' }${actionName}();`, baseIndent)
+            line(`${prefixFirstLine}${actionName}();`, baseIndent)
         ];
     } else {
         return [
-            line(`${includeReturn ? 'return ' : '' }${actionName}({`, baseIndent),
+            line(`${prefixFirstLine}${actionName}({`, baseIndent),
             ...props.map((p) => {
                 return line(`${getActionPropertyName(p.key)}: ${p.value},`, baseIndent + 1)
             }),

@@ -1,6 +1,7 @@
 import { Rule, chain, SchematicContext } from "@angular-devkit/schematics";
 import { Tree } from "@angular-devkit/schematics/src/tree/interface";
-import { appendNamedImports, IVerifyNamedImport } from "../ast-helpers";
+import { appendNamedImports } from "../ast-helpers";
+import { IVerifyNamedImport } from "../interfaces";
 
 function appendImport(filePath: string, namedImport: IVerifyNamedImport): Rule {
     return (tree: Tree) => {
@@ -16,7 +17,6 @@ function appendImport(filePath: string, namedImport: IVerifyNamedImport): Rule {
 }
 export function appendNamedImportsRule(filePath: string, namedImports: IVerifyNamedImport[]): Rule {
     return (tree: Tree, context: SchematicContext) => {
-        console.log('APPEND RULE');
         const ruleChain = chain(
             namedImports.map((ni) => appendImport(filePath, ni))
         );

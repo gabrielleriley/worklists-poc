@@ -8,7 +8,7 @@ function getResponseType(entityName: string, successProperties: ActionProperty[]
     } else if (successProperties.includes(ActionProperty.EntityList)) {
         return `Observable<${getEntityStatusProperty(EntityStatusProperty.PayloadInterface)}<${entityInterfaceName}[]>>`;
     } else {
-        return `Observable<${getEntityStatusProperty(EntityStatusProperty.PayloadInterface)}<any>>`;
+        return `Observable<${getEntityStatusProperty(EntityStatusProperty.PayloadInterface)}<void>>`;
     }
 }
 
@@ -27,10 +27,11 @@ export function getEntityServiceMethod(config: IEntityServiceConfig) {
         ActionProperty.SingleEntityId,
         ActionProperty.EntityIdList,
         ActionProperty.SingleEntity,
+        ActionProperty.SinglePartialEntity,
         ActionProperty.PageInfo,
         ActionProperty.EntityCriteria
     ].filter(p => config.triggerProperties.includes(p));
-    const methodArgs = getArguments(config.entityName, validProperties);
+    const methodArgs = getArguments(config.entityName, validProperties).join(', ');
     const responseType = getResponseType(config.entityName, config.responseProperties);
     const lines = [
         line(`public ${config.methodName}(${methodArgs}): ${responseType} {`),

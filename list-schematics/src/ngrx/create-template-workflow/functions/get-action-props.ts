@@ -15,8 +15,9 @@ export function getTriggerProperties(templateType: TemplateType, hasCriteria: bo
             ];
         case TemplateType.Create:
         case TemplateType.Update:
-        case TemplateType.Patch:
             return [ActionProperty.SingleEntity];
+        case TemplateType.Patch:
+            return [ActionProperty.SinglePartialEntity];
         case TemplateType.DeleteById:
         case TemplateType.OtherById:
             return [ActionProperty.SingleEntityId];

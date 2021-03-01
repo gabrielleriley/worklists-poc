@@ -1,4 +1,6 @@
+import { IVerifyImports } from "../../../shared/interfaces";
 import { ActionSuffix, getActionName } from "../../../shared/ngrx-helpers";
+import { getFilePath } from '../../functions/import-helpers';
 import { createDispatchEffect, createMergeEffect, createSwitchedEffect, IEffectDefinition } from "../../shared/creation-functions";
 import { ITemplateWorkflowSchema, TemplateType } from "../schema.interface";
 import { getEffectsTriggerProperties, getSuccessProperties } from "./get-action-props";
@@ -6,6 +8,22 @@ import { getEffectsTriggerProperties, getSuccessProperties } from "./get-action-
 function useSwitchEffect(templateType: TemplateType) {
     return [TemplateType.ReadMultiple, TemplateType.ReadPage]
         .includes(templateType);
+}
+
+export function verifyEffectsImports(template: ITemplateWorkflowSchema): IVerifyImports {
+    // TODO: update these based upon the template type
+    return {
+        namespaceImports: [
+            { namespace: 'EntityActions', moduleSpecifier: getFilePath(template.name, 'actions') },
+            { namespace: 'Selectors', moduleSpecifier: getFilePath(template.name, 'selectors') },
+        ],
+        namedImports: [
+            { names: ['createEffect', 'ofType'], moduleSpecifier: '@ngrx/effects' },
+            { names: ['Store', 'select'], moduleSpecifier: '@ngrx/store' },
+            { names: ['withLatestFrom', 'switchMap', 'map', 'catchError', 'mergeMap', 'mapTo'], moduleSpecifier: 'rxjs/operators' },
+            { names: ['of'], moduleSpecifier: 'rxjs' }
+        ]
+    };
 }
 
 export function createTemplateEffects(template: ITemplateWorkflowSchema) {

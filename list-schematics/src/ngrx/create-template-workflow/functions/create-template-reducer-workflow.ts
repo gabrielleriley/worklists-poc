@@ -1,6 +1,6 @@
-import { TemplateType, ITemplateWorkflowSchema } from "../schema.interface";
 import { ResourceMethodEnumEntry } from "../../../shared/ngrx-helpers";
-import { ReducerAdapterAction, IReducerConfig, createReducerWorkflow } from "../../shared/creation-functions";
+import { createReducerWorkflow, IReducerConfig, IReducerWorkflowTestConfig, ReducerAdapterAction, ReducerTestType, createReducerWorkflowTests } from "../../shared/creation-functions";
+import { ITemplateWorkflowSchema, TemplateType } from "../schema.interface";
 
 function getResourceMethod(templateType: TemplateType) {
     switch (templateType) {
@@ -57,4 +57,14 @@ export function createTemplateReducerWorkflow(template: ITemplateWorkflowSchema)
     };
 
     return `\n${createReducerWorkflow(config)}\n`;
+}
+
+export function createTemplateReducerWorkflowSpecs(template: ITemplateWorkflowSchema) {
+    const config: IReducerWorkflowTestConfig = {
+        entityName: template.name,
+        actionPrefix: template.actionPrefix,
+        resourceType: getResourceMethod(template.template),
+        testTypes: [ReducerTestType.StatusTimestamps]
+    };
+    return `\n${createReducerWorkflowTests(config)}\n`;
 }
