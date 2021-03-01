@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, Output, OnInit, OnDestroy, EventEmitter, OnChanges, Directive } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, Output, OnInit, OnDestroy, EventEmitter, OnChanges, Directive, ContentChild, ContentChildren, QueryList } from "@angular/core";
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { KeyValue } from '@angular/common';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-card-list-preloading-indicator',
@@ -48,7 +49,7 @@ export class CardTableTableSectionComponent { }
 const cardMessageComponentTemplate = `<div class="card-table--centered-message">
 <div fxLayout="row" fxLayoutAlign="center"><ng-content></ng-content></div>
 <div class="card-table--button"><ng-content select="button"></ng-content></div>
-</div>`
+</div>`;
 
 @Component({
     selector: 'app-card-list-empty-message',
@@ -73,13 +74,26 @@ export class CardListErrorMessageComponent { }
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTableComponent {
+    /**
+     * This input is true when the first table data load has not yet completed
+     */
     @Input() isPreloading: boolean;
+    /**
+     * This input is true when table data is reloading
+     */
     @Input() isLoading: boolean;
     @Input() hasError: boolean;
     @Input() isEmpty: boolean;
 
+    @ContentChildren(MatPaginator, {descendants: true}) paginator: QueryList<any>;
+
+    // If no inputs are provided, then it is assumed that the parent component is controlling the visibility of sections
     public get ignoreInterface() {
         return [this.isPreloading, this.hasError, this.isEmpty].every((val) => val === undefined);
+    }
+
+    public get showPaginationSection() {
+        return this.paginator?.length > 0 ?? false;
     }
 }
 

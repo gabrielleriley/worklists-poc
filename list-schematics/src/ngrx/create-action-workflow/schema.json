@@ -1,0 +1,63 @@
+{
+    "properties": {
+        "directory": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What directory is the entity store located in?"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the store entity's name?"
+        },
+        "actionPrefix": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What prefix should the actions have?"
+        },
+        "featureArea": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What feature area will utilize this action workflow? (ex: User Edit Page)"
+        },
+        "method": {
+            "type": "string",
+            "enum": [
+                "Create",
+                "Read",
+                "Update",
+                "Delete",
+                "Patch",
+                "Other"
+            ],
+            "x-prompt": "What CRUD action does the API use?"
+        },
+        "apiProperties": {
+            "type": "string",
+            "enum": [
+                "Filter/Sort parameters",
+                "Page Info",
+                "Page Info AND Filter/Sort parameters",
+                "Single Entity",
+                "Single Entity ID",
+                "Something Else",
+                "None"
+            ],
+            "x-prompt": "What properties does the API require?"
+        },
+        "apiResponse": {
+            "type": "string",
+            "enum": [
+                "Entity list",
+                "Other",
+                "Nothing"
+            ],
+            "x-prompt": "What does the API return?"
+        },
+        "apiMethodName": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What should the API call method be named?"
+        }
+    }
+}

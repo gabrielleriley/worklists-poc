@@ -10,6 +10,21 @@
       "description": "Generates a filterable/sortable table",
       "factory": "./table/index#tableSchematics",
       "schema": "./table/schema.json"
+    },
+    "create-entity-store": {
+      "description": "Generates a NgRx entity store with status tracking",
+      "factory": "./ngrx/create-entity-store/index#createStoreSchematics",
+      "schema": "./ngrx/create-entity-store/schema.json"
+    },
+    "create-action-workflow": {
+      "description": "OBSOLETE - Adds an action workflow to an existing NgRx store",
+      "factory": "./ngrx/create-action-workflow/index#createActionWorkflow",
+      "schema": "./ngrx/create-action-workflow/schema.json"
+    },
+    "create-template-workflow": {
+      "description": "Adds an action template-based workflow to an existing NgRx store",
+      "factory": "./ngrx/create-template-workflow/index#createTemplateActionWorkflow",
+      "schema": "./ngrx/create-template-workflow/schema.json"
     }
   }
 }

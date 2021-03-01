@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
+    "baseUrl": "./",
     "lib": [
       "es2018",
       "dom"
@@ -23,12 +23,12 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "src/*/files/**/*"
+    "src/**/files/**/*"
   ]
 }

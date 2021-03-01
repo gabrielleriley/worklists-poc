@@ -1,4 +1,6 @@
 const express = require('express')
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
 var cors = require('cors')
 const app = express()
 const port = 3000
@@ -67,6 +69,28 @@ app.get('/user', function (req, res) {
     }, Math.random() * 750)
 })
 
+app.get('/user/:userId', function (req, res) {
+    if (people.some(p => p.login.uuid === req.params.userId)) {
+        let person = people.find(p => p.login.uuid === req.params.userId);
+        person = {
+            id: person.login.uuid,
+            gender: person.gender,
+            name: person.name,
+            dob: person.dob.date,
+            email: person.email,
+            nationality: person.nat
+        };
+        setTimeout(() => {
+            res.json({ data: person });
+        }, Math.random() * 500);
+    } else {
+        setTimeout(() => {
+            res.status(404);
+            res.json({ errorMessage: 'Not Found!' });
+        }, Math.random() * 500);
+    }
+})
+
 app.get('/user/count', function (req, res) {
     const genders = req.query.genders ? req.query.genders.split(',') : [];
     const nationalities = req.query.nationalities ? req.query.nationalities.split(',') : [];
@@ -93,6 +117,27 @@ app.delete('/user/:userId', function (req, res) {
         }, Math.random() * 500);
     }
 })
+
+app.put('/user/:userId', jsonParser, function(req, res) {
+    if (people.some(p => p.login.uuid === req.params.userId)) {
+        people = people.map((p) => {
+            if (p.login.uuid === req.params.userId) {
+                const newPerson = { ...p, ...req.body, dob: { date: req.body.dob } };
+                return newPerson;
+            } else {
+                return p;
+            }
+        });
+        setTimeout(() => {
+            res.json(undefined);
+        }, Math.random() * 500);
+    } else {
+        setTimeout(() => {
+            res.status(404);
+            res.json({ errorMessage: 'Not Found!' });
+        }, Math.random() * 500);
+    }
+});
 
 app.get('/nationality', function (req, res) {
     setTimeout(() => {

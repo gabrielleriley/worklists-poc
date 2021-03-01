@@ -15,6 +15,7 @@ import { StateModule } from './data-stores/state.module';
 import { UtilitiesModule } from './utils';
 import { CardListInteractionDemoModule } from './pages/interaction-demo/card-list-interaction-demo.module';
 import { HttpClientModule } from '@angular/common/http';
+import { UsersFeatureModule } from './pages/users/users-feature.module';
 
 const matModules = [
     MatToolbarModule,
@@ -29,6 +30,7 @@ const matModules = [
 
 const demos = [
     CardListInteractionDemoModule,
+    UsersFeatureModule,
 ]
 
 @NgModule({

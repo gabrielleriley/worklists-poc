@@ -1,0 +1,1 @@
+<%= createIndexExports(name) %>

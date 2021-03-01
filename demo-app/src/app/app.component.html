@@ -18,9 +18,10 @@
             <app-card-list-interaction-composed-demo></app-card-list-interaction-composed-demo>
         </ng-container>
 
-        <ng-container *ngIf="option === options[1]">
-            <h1>Worklist Demo</h1>
+        <div fxFlexLayout="row" fxLayoutAlign=" none" fxFill *ngIf="option === options[1]">
+            <app-users-left-component></app-users-left-component>
+            <app-users-right-component></app-users-right-component>
             <!-- Put the demo worklist here -->
-        </ng-container>
+        </div>
     </div>
 </mat-drawer-container>
